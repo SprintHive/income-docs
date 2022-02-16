@@ -8,13 +8,13 @@ yourSystem->sprinthive:Create income verification
 yourSystem->sprinthive:Upload documents
 
 activate sprinthive
-sprinthive->sprinthive:Classifies docuement
-sprinthive->sprinthive:Extracts docuement
-sprinthive->sprinthive:Validates docuement
-sprinthive->sprinthive:Matches docuement to applicant
+sprinthive->sprinthive:Classifies document
+sprinthive->sprinthive:Extracts document
+sprinthive->sprinthive:Validates document
+sprinthive->sprinthive:Matches document to applicant
 sprinthive->sprinthive:Determines income
 deactivate sprinthive
 
 yourSystem->sprinthive:Fetch income verification result
-yourSystem->yourSystem:Process the application
+yourSystem->yourSystem:Process the result
 yourSystem->applicant: Notify applicant of the result
