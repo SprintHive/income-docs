@@ -1,0 +1,182 @@
+{
+	"info": {
+		"_postman_id": "1a6166a6-6547-46cd-ab6a-7a86ba75a5c9",
+		"name": "Income quick start",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Income Verification",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"correlationId\": \"quick-start-1\",\n    \"declaration\": {\n        \"nettIncome\": \"20000\",\n        \"grossIncome\": \"25000\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{income}}/v1/incomeVerification",
+					"host": [
+						"{{income}}"
+					],
+					"path": [
+						"v1",
+						"incomeVerification"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload file",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "apikey",
+						"type": "text",
+						"value": "{{apiKey}}"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": []
+						}
+					]
+				},
+				"url": {
+					"raw": "{{income}}/v1/incomeVerification/{{incomeVerificationId}}/upload/file",
+					"host": [
+						"{{income}}"
+					],
+					"path": [
+						"v1",
+						"incomeVerification",
+						"{{incomeVerificationId}}",
+						"upload",
+						"file"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get income result",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "apiKey",
+						"value": "{{apiKey}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{income}}/v1/incomeVerification/{{incomeVerificationId}}/result",
+					"host": [
+						"{{income}}"
+					],
+					"path": [
+						"v1",
+						"incomeVerification",
+						"{{incomeVerificationId}}",
+						"result"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "audience",
+				"value": {
+					"e74ea71a-19a2-4595-8081-a40900c29b6e": "{{audience}}"
+				},
+				"type": "any"
+			},
+			{
+				"key": "scope",
+				"value": "incomeVerification:user",
+				"type": "string"
+			},
+			{
+				"key": "clientSecret",
+				"value": "{{clientSecret}}",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "{{clientId}}",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "{{authEndpoint}}",
+				"type": "string"
+			},
+			{
+				"key": "tokenName",
+				"value": "Income Auth Token",
+				"type": "string"
+			},
+			{
+				"key": "challengeAlgorithm",
+				"value": "S256",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "client_credentials",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

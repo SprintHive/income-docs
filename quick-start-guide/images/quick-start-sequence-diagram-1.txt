@@ -1,0 +1,20 @@
+actor "Applicant" as applicant
+participant "Your system" as yourSystem
+participant "Sprinthive" as sprinthive
+
+applicant->yourSystem: Applies for product
+yourSystem->yourSystem:Creates and pre-approves applicant
+yourSystem->sprinthive:Create income verification
+yourSystem->sprinthive:Upload documents
+
+activate sprinthive
+sprinthive->sprinthive:Classifies docuement
+sprinthive->sprinthive:Extracts docuement
+sprinthive->sprinthive:Validates docuement
+sprinthive->sprinthive:Matches docuement to applicant
+sprinthive->sprinthive:Determines income
+deactivate sprinthive
+
+yourSystem->sprinthive:Fetch income verification result
+yourSystem->yourSystem:Process the application
+yourSystem->applicant: Notify applicant of the result
