@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "1a6166a6-6547-46cd-ab6a-7a86ba75a5c9",
 		"name": "Income quick start",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2598189"
 	},
 	"item": [
 		{
@@ -12,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"correlationId\": \"quick-start-1\",\n    \"declaration\": {\n        \"nettIncome\": \"20000\",\n        \"grossIncome\": \"25000\"\n    }\n}",
+					"raw": "{\n    \"correlationId\": \"quick-start-1\",\n    \"primaryIncome\": {\n        \"nettIncome\": \"20000\",\n        \"grossIncome\": \"25000\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -20,12 +21,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{income}}/v1/incomeVerification",
+					"raw": "{{income}}/v2/incomeVerification",
 					"host": [
 						"{{income}}"
 					],
 					"path": [
-						"v1",
+						"v2",
 						"incomeVerification"
 					]
 				}
@@ -54,48 +55,89 @@
 					"formdata": [
 						{
 							"key": "file",
+							"description": "An pdf of a bank statement or a payslip",
 							"type": "file",
-							"src": []
+							"src": "/Users/jon/projects/sprinthive/v1/TestData/bankstatement.pdf"
 						}
 					]
 				},
 				"url": {
-					"raw": "{{income}}/v1/incomeVerification/{{incomeVerificationId}}/upload/file",
+					"raw": "{{income}}/v2/incomeVerification/{{incomeVerificationId}}/document",
 					"host": [
 						"{{income}}"
 					],
 					"path": [
-						"v1",
+						"v2",
 						"incomeVerification",
 						"{{incomeVerificationId}}",
-						"upload",
-						"file"
+						"document"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Get income result",
+			"name": "Get Income Verification State Copy",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "scope",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "s0UFiMK5tV6C-t4_avhwcaRJHYKSl6mYzjdiDIEWAYNHTHklZUxdGar1dIhlwvr6",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "Tssy08PFF0HXcvL0OJeU0Xip48YzHMw0",
+							"type": "string"
+						},
+						{
+							"key": "audience",
+							"value": {
+								"a8a11202-73dc-4730-b08e-d41bdbddd760": "sprinthive.dev.api-gateway"
+							},
+							"type": "any"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "https://auth.nonprod.sprinthive.com/oauth/token",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "auth0",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
-				"header": [
-					{
-						"key": "apiKey",
-						"value": "{{apiKey}}",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
-					"raw": "{{income}}/v1/incomeVerification/{{incomeVerificationId}}/result",
+					"raw": "{{income}}/v2/incomeVerification/{{incomeVerificationId}}/state",
 					"host": [
 						"{{income}}"
 					],
 					"path": [
-						"v1",
+						"v2",
 						"incomeVerification",
 						"{{incomeVerificationId}}",
-						"result"
+						"state"
 					]
 				}
 			},
@@ -106,16 +148,16 @@
 		"type": "oauth2",
 		"oauth2": [
 			{
+				"key": "scope",
+				"value": "",
+				"type": "string"
+			},
+			{
 				"key": "audience",
 				"value": {
 					"e74ea71a-19a2-4595-8081-a40900c29b6e": "{{audience}}"
 				},
 				"type": "any"
-			},
-			{
-				"key": "scope",
-				"value": "incomeVerification:user",
-				"type": "string"
 			},
 			{
 				"key": "clientSecret",
