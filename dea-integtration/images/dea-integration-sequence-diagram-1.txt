@@ -1,0 +1,34 @@
+title Income Verification with DEA
+
+actor "Applicant" as applicant
+participant "TymeBank" as tyme
+participant "Sprinthive" as sprinthive
+
+applicant->tyme: Applies for account
+tyme->tyme: Pre-approve
+
+
+alt Consent given before create
+applicant->tyme: Consent given
+tyme->tyme: Consent recored
+tyme->sprinthive: Create income verification\nwith consent and bank details
+sprinthive->sprinthive: Initiate the DEA request
+end
+
+== OR ==
+
+alt Consent given after create
+tyme->sprinthive: Create income verification\nwithout consent
+
+applicant->tyme: Consent given
+tyme->tyme: Consent recored
+tyme->sprinthive: Consent provided\nwith bank details
+sprinthive->sprinthive: Initiate the DEA request
+end
+
+==Automation successfull==
+
+sprinthive->sprinthive:Close income verification
+sprinthive->tyme: Status is Returned
+tyme->tyme: Closes the application
+tyme->applicant:Send notification
