@@ -58,7 +58,7 @@ Response:
 }
 ```
 
-### Fetching the income verification state?
+### Fetching the income verification state
 
 Endpoint: ```v2/incomeVerification/${incomeVerificationId}/state```  
 Method: GET  
