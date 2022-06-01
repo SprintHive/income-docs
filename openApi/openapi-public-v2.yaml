@@ -1,0 +1,567 @@
+openapi: 3.0.1
+info:
+  title: SprintHive Income Verification API
+  description: >-
+    # Introduction
+
+    The Income Verification API allows a client to extract and analyse income data from bank statements and payslips
+
+    ## Usage
+      *  Create an income verification
+      *  Upload a bank statement or a payslip
+      *  When income completion notification is received make a get request to get the latest income verification state
+
+    <!-- ReDoc-Inject: <security-definitions> -->
+  contact:
+    name: SprintHive
+    url: 'https://sprinthive.com/#contact'
+    email: buzz@sprinthive.com
+  version: 2.0.0
+servers:
+  - url: 'https://{tenant}.{environment}.sprinthive.com/income'
+    variables:
+      tenant:
+        description: The tenant ID will be provided by SprintHive
+        default: please-specify
+      environment:
+        description: The environment to use
+        default: uat
+security:
+  - bearerAuth: []
+    ApiKeyAuth: []
+paths:
+  /v2/incomeVerification:
+    post:
+      tags:
+        - IncomeVerificationV2
+      summary: Start a new income verification
+      operationId: createIncomeVerification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIncomeVerificationV2'
+        required: true
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/IncomeVerificationCreated'
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:create'
+  '/v2/incomeVerification/{incomeVerificationId}/deaConsent':
+    post:
+      tags:
+        - IncomeVerificationV2
+      summary: Confirms that the applicant has provided consent and we can fetch their bank statement data from DEA
+      operationId: deaConsent
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          description: Income verification id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeaConsentV2'
+        required: true
+      responses:
+        '200':
+          description: default response
+      security:
+        - bearerAuth:
+            - 'incomeVerification:create'
+  '/v2/incomeVerification/{incomeVerificationId}':
+    get:
+      tags:
+        - IncomeVerificationV2
+      summary: Retrieve an existing income verification by its id
+      operationId: getIncomeVerificationById
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          description: Income verification id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/IncomeVerificationDtoV2'
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:read'
+  '/v2/incomeVerification/{incomeVerificationId}/document':
+    post:
+      tags:
+        - IncomeVerificationV2
+      operationId: uploadDocument
+      summary: Upload and link a proof of income to an income verification
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+                - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/DocumentInfoV2'
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:file:upload'
+  '/v2/incomeVerification/{incomeVerificationId}/manualCapture/manualIncome':
+    post:
+      tags:
+        - IncomeVerificationV2
+      summary: Capture the result of manually viewing the income documents
+      operationId: manualCaptureIncome
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          description: Income verification id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IncomeDeterminedV2'
+        required: true
+      responses:
+        '200':
+          description: default response
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:manualCapture:create'
+  '/v2/incomeVerification/{incomeVerificationId}/state':
+    get:
+      tags:
+        - IncomeVerificationV2
+      summary: Used to determine the most recent state of an income verification request.
+      operationId: getIncomeVerificationState
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          description: Income verification id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/IncomeVerificationStateV2'
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:state:read'
+components:
+  schemas:
+    ErrorDetail:
+      type: object
+      properties:
+        field:
+          type: string
+        errorCode:
+          type: string
+    ExceptionMessage:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/RequestError'
+    RequestError:
+      type: object
+      properties:
+        errorType:
+          type: string
+        httpCode:
+          type: integer
+          format: int32
+        traceId:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+        timestamp:
+          type: string
+          format: date-time
+    CreateIncomeVerificationV2:
+      required:
+        - correlationId
+        - primaryIncome
+      type: object
+      properties:
+        config:
+          $ref: '#/components/schemas/IncomeVerificationConfig'
+        correlationId:
+          type: string
+        primaryIncome:
+          $ref: '#/components/schemas/Declaration'
+        otherIncome:
+          type: array
+          items:
+            $ref: '#/components/schemas/Declaration'
+        applicantDetails:
+          $ref: '#/components/schemas/ApplicantDetails'
+        invMetadata:
+          $ref: '#/components/schemas/InvMetadata'
+    Declaration:
+      required:
+        - nettIncome
+      type: object
+      properties:
+        grossIncome:
+          type: number
+        nettIncome:
+          type: number
+        payCycleInDays:
+          type: integer
+          format: int32
+    IncomeVerificationConfig:
+      type: object
+      properties:
+        minTransactionDaysRequired:
+          type: integer
+          format: int32
+        minPayslipsDaysRequired:
+          type: integer
+          format: int32
+        minPayslipsRequired:
+          type: integer
+          format: int32
+        timeOutMinutes:
+          type: integer
+          format: int64
+        bankStatementAndPayslipRequired:
+          type: boolean
+        limitTransactionsByCutOffDate:
+          type: boolean
+        determineIncomeOnTimeOut:
+          type: boolean
+        maxAgeDays:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+        incomeDetectorStrategy:
+          type: string
+          nullable: true
+    ApplicantDetails:
+      type: object
+      properties:
+        dateOfBirth:
+          type: string
+          format: date-time
+          nullable: true
+        emailAddress:
+          type: string
+          nullable: true
+        currentEmployerName:
+          type: string
+          nullable: true
+        currentEmployeeNumber:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        initials:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        surname:
+          type: string
+          nullable: true
+        idNumber:
+          type: string
+          nullable: true
+        passportNumber:
+          type: string
+          nullable: true
+        taxNo:
+          type: string
+          nullable: true
+        bankAccountNumber:
+          type: string
+          nullable: true
+        bankBranchCode:
+          type: string
+          nullable: true
+        bankName:
+          type: string
+          nullable: true
+    InvMetadata:
+      type: object
+      properties:
+        relatedProduct:
+          $ref: '#/components/schemas/RelatedProductMetadata'
+    RelatedProductMetadata:
+      required:
+        - id
+        - displayName
+      type: object
+      properties:
+        id:
+          type: string
+        displayName:
+          type: string
+        channel:
+          type: string
+          nullable: true
+        logo:
+          type: string
+          nullable: true
+    IncomeVerificationCreated:
+      required:
+        - correlationId
+        - incomeVerificationId
+      type: object
+      properties:
+        incomeVerificationId:
+          type: string
+        correlationId:
+          type: string
+    ErrorEventV2:
+      required:
+        - code
+        - source
+      type: object
+      properties:
+        source:
+          type: string
+        code:
+          type: string
+        message:
+          type: string
+    IncomeVerificationDtoV2:
+      required:
+        - config
+        - errors
+        - linkedDocuments
+        - status
+      type: object
+      properties:
+        incomeVerificationId:
+          type: string
+        config:
+          $ref: '#/components/schemas/IncomeVerificationConfig'
+        correlationId:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+        expiryDate:
+          type: string
+          format: date-time
+        declaration:
+          $ref: '#/components/schemas/Declaration'
+        applicantDetails:
+          $ref: '#/components/schemas/ApplicantDetails'
+        invMetadata:
+          $ref: '#/components/schemas/InvMetadata'
+    DocumentInfoV2:
+      type: object
+      required:
+        - documentId
+      properties:
+        documentId:
+          type: string
+        documentHash:
+          type: string
+    IncomeDeterminedV2:
+      type: object
+      properties:
+        nettIncome:
+          type: number
+        payDate:
+          type: string
+          format: date
+    DeaConsentV2:
+      required:
+        - businessUnit
+        - providerBusinessUnit
+      type: object
+      properties:
+        businessUnit:
+          type: string
+        providerBusinessUnit:
+          type: string
+        initials:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        surname:
+          type: string
+          nullable: true
+        idNumber:
+          type: string
+          nullable: true
+        emailAddress:
+          type: string
+          nullable: true
+        bankAccountNumber:
+          type: string
+          nullable: true
+        bankBranchCode:
+          type: string
+          nullable: true
+    IncomeVerificationStateV2:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/IncomeVerificationStatusV2'
+        evidenceState:
+          $ref: '#/components/schemas/EvidenceState'
+        result:
+          $ref: '#/components/schemas/IncomeVerificationResultV2'
+    EvidenceState:
+      type: object
+      properties:
+        bankStatements:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentInfoV2'
+        payslips:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentInfoV2'
+        unknown:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentInfoV2'
+    IncomeVerificationResultV2:
+      type: object
+      properties:
+        method:
+          $ref: '#/components/schemas/ResultMethod'
+        status:
+          $ref: '#/components/schemas/ResultStatus'
+        analysisResult:
+          $ref: '#/components/schemas/AnalysisResultV2'
+    AnalysisResultV2:
+      type: object
+      properties:
+        primaryIncome:
+          $ref: '#/components/schemas/AnalysisResultItemV2'
+        otherIncome:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnalysisResultItemV2'
+    AnalysisResultItemV2:
+      type: object
+      properties:
+        declaredNettIncome:
+          type: number
+        detectedNettIncome:
+          type: number
+        confidence:
+          type: number
+        variance:
+          type: number
+        payDates:
+          type: array
+          items:
+            type: string
+            format: date
+        payDay:
+          type: integer
+        payCycle:
+          type: integer
+    IncomeVerificationStatusV2:
+      type: string
+      enum:
+        - InProgress
+        - ReferedToFraud
+        - ConfirmedFraud
+        - Success
+        - Failed
+    ResultMethod:
+      type: string
+      enum:
+        - Automated
+        - Manual
+    ResultStatus:
+      type: string
+      enum:
+        - None
+        - WithinTolerance
+        - OutsideTolerance
+        - Confirmed
+  securitySchemes:
+    bearerAuth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: 'https://auth.prod.sprinthive.com/oauth/token'
+          refreshUrl: 'https://auth.prod.sprinthive.com/oauth/token'
+          scopes:
+            'incomeVerification:create': Create Income Verification cases and read income detector strategies
+            'incomeVerification:read': Read Income Verification cases
+            'incomeVerification:state:read': Read the most recent state for an income verification
+            'incomeVerification:file:upload': Upload documents to a income verification
+            'incomeVerification:manualCapture:create': Capture the nett income for an Income Verification
+    ApiKeyAuth:
+      type: apiKey
+      name: apiKey
+      in: header
