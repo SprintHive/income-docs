@@ -65,34 +65,43 @@ Method: GET
 Response:
 ```json
 {
-    "status": "SUCCESS",
-    "evidenceState": {
-        "bankStatements": [
-            {
-                "documentId": "904e24e2-882a-485b-a3cd-0dc916211442",
-                "documentHash": "4306ae617022feac27cd97b31d933163292b315c"
-            }
+  "status": "SUCCESS",
+  "evidenceState": {
+    "bankStatements": [
+      {
+        "documentId": "904e24e2-882a-485b-a3cd-0dc916211442",
+        "documentHash": "4306ae617022feac27cd97b31d933163292b315c"
+      }
+    ],
+    "payslips": [],
+    "unknown": []
+  },
+  "result": {
+    "method": "AUTOMATED",
+    "status": "WITHIN_TOLERANCE",
+    "accountHolderName": "Rev Thomas Bayes",
+    "bankName": "Capitec Bank",
+    "bankAccountNumber": "1234567890",
+    "analysisResult": {
+      "primaryIncome": {
+        "declaredNettIncome": 20000,
+        "detectedNettIncome": 19226.92,
+        "confidence": 0.9892,
+        "variance": -0.04021,
+        "payDates": [
+          {
+            "date": "2021-05-01",
+            "amount": 19226.92
+          },
+          {
+            "date": "2021-04-28",
+            "amount": 19226.92
+          }
         ],
-        "payslips": [],
-        "unknown": []
-    },
-    "result": {
-        "method": "AUTOMATED",
-        "status": "WITHIN_TOLERANCE",
-        "analysisResult": {
-            "primaryIncome": {
-                "declaredNettIncome": 20000,
-                "detectedNettIncome": 19226.92,
-                "confidence": 0.9892,
-                "variance": -0.04021,
-                "payDates": [
-                    "2021-05-01",
-                    "2021-04-28"
-                ],
-                "payDay": 28,
-                "payCycle": 30
-            }
-        }
+        "payDay": 28,
+        "payCycle": 30
+      }
     }
+  }
 }
 ```
