@@ -429,12 +429,34 @@ components:
           type: string
     IncomeDeterminedV2:
       type: object
+      required:
+        - payments
       properties:
-        nettIncome:
-          type: number
-        payDate:
+        payments:
+          type: array
+          nullable: false
+          items:
+            $ref: "#/components/schemas/Payment"
+        accountHolderName:
           type: string
-          format: date
+          nullable: true
+        bankName:
+          type: string
+          nullable: true
+        bankAccountNumber:
+          type: string
+          nullable: true
+        payDay:
+          type: string
+          format: integer
+          nullable: true
+        payCycle:
+          type: string
+          format: integer
+          nullable: true
+        workItemId:
+          type: string
+          nullable: true
     DeaConsentV2:
       required:
         - businessUnit
@@ -497,6 +519,12 @@ components:
           $ref: '#/components/schemas/ResultMethod'
         status:
           $ref: '#/components/schemas/ResultStatus'
+        accountHolderName:
+          type: string
+        bankName:
+          type: string
+        bankAccountNumber:
+          type: string
         analysisResult:
           $ref: '#/components/schemas/AnalysisResultV2'
     AnalysisResultV2:
@@ -519,11 +547,10 @@ components:
           type: number
         variance:
           type: number
-        payDates:
+        payments:
           type: array
           items:
-            type: string
-            format: date
+            $ref: "#/components/schemas/Payment"
         payDay:
           type: integer
         payCycle:
@@ -548,6 +575,14 @@ components:
         - WithinTolerance
         - OutsideTolerance
         - Confirmed
+    Payment:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        amount:
+          type: number
   securitySchemes:
     bearerAuth:
       type: oauth2
