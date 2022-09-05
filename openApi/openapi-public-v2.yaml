@@ -112,6 +112,35 @@ paths:
       security:
         - bearerAuth:
             - 'incomeVerification:read'
+  '/v2/incomeVerification/{incomeVerificationId}/fraudAnalysis':
+    get:
+      tags:
+        - IncomeVerificationV2
+      summary: Retrieve fraud analysis data for an income verification
+      operationId: getFraudAnalysis
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          description: Income verification id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/FraudAnalysisDtoV2'
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:read'
   '/v2/incomeVerification/{incomeVerificationId}/document':
     post:
       tags:
@@ -125,6 +154,7 @@ paths:
           schema:
             type: string
       requestBody:
+        required: true
         content:
           multipart/form-data:
             schema:
@@ -151,6 +181,131 @@ paths:
       security:
         - bearerAuth:
             - 'incomeVerification:file:upload'
+  '/v2/incomeVerification/{incomeVerificationId}/suspectedFraud':
+    post:
+      tags:
+        - IncomeVerificationV2
+      operationId: suspectedFraud
+      summary: Create a task to review if the income verification is fraudulent
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuspectedFraudV2'
+      responses:
+        '200':
+          description: default response
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:fraud:create'
+  '/v2/incomeVerification/{incomeVerificationId}/confirmNotFraud':
+    post:
+      tags:
+        - IncomeVerificationV2
+      operationId: confirmNotFraud
+      summary: Allows a user to confirm an income verification is not fraudulent
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmNotFraudV2'
+      responses:
+        '200':
+          description: default response
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:fraud:create'
+  '/v2/incomeVerification/{incomeVerificationId}/confirmFraud':
+    post:
+      tags:
+        - IncomeVerificationV2
+      operationId: confirmFraud
+      summary: Allows a user to confirm an income verification is fraudulent
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmFraudV2'
+      responses:
+        '200':
+          description: default response
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:fraud:create'
+  '/v2/incomeVerification/{incomeVerificationId}/document/{documentId}':
+    get:
+      tags:
+        - IncomeVerificationV2
+      summary: Get the latest state for a document.
+      operationId: getIncomeVerificationDocument
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          description: Income verification id
+          required: true
+          schema:
+            type: string
+        - name: documentId
+          in: path
+          description: DocumentId for the document
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/DocumentStateV2'
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:document:read'
   '/v2/incomeVerification/{incomeVerificationId}/manualCapture/manualIncome':
     post:
       tags:
@@ -211,6 +366,35 @@ paths:
       security:
         - bearerAuth:
             - 'incomeVerification:state:read'
+  '/v2/incomeVerification/{incomeVerificationId}/transactions':
+    get:
+      tags:
+        - IncomeVerificationV2
+      summary: Returns the consolidated list of transactions that were used to determine income.
+      operationId: getIncomeVerificationTransactions
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          description: Income verification id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BankStatement'
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:state:read'
 components:
   schemas:
     ErrorDetail:
@@ -242,6 +426,25 @@ components:
         timestamp:
           type: string
           format: date-time
+    DocumentStateV2:
+      type: object
+      properties:
+        source:
+          $ref: '#/components/schemas/DocumentSource'
+        type:
+          $ref: '#/components/schemas/DocumentType'
+        status:
+          $ref: '#/components/schemas/DocumentStatus'
+        hash:
+          type: string
+          nullable: true
+        received:
+          type: string
+          format: date-time
+        bankStatement:
+          $ref: '#/components/schemas/BankStatement'
+        payslip:
+          $ref: '#/components/schemas/Payslip'
     CreateIncomeVerificationV2:
       required:
         - correlationId
@@ -395,9 +598,6 @@ components:
     IncomeVerificationDtoV2:
       required:
         - config
-        - errors
-        - linkedDocuments
-        - status
       type: object
       properties:
         incomeVerificationId:
@@ -412,8 +612,12 @@ components:
         expiryDate:
           type: string
           format: date-time
-        declaration:
+        primaryIncome:
           $ref: '#/components/schemas/Declaration'
+        otherIncome:
+          type: array
+          items:
+            $ref: '#/components/schemas/Declaration'
         applicantDetails:
           $ref: '#/components/schemas/ApplicantDetails'
         invMetadata:
@@ -426,6 +630,35 @@ components:
         documentId:
           type: string
         documentHash:
+          type: string
+        type:
+          $ref: '#/components/schemas/DocumentType'
+        received:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/DocumentStatus'
+    FraudAnalysisDtoV2:
+      type: object
+      properties:
+        history:
+          type: array
+          items:
+            $ref: "#/components/schemas/FraudHistoryItem"
+    SuspectedFraudV2:
+      type: object
+      properties:
+        reason:
+          type: string
+    ConfirmNotFraudV2:
+      type: object
+      properties:
+        reason:
+          type: string
+    ConfirmFraudV2:
+      type: object
+      properties:
+        reason:
           type: string
     IncomeDeterminedV2:
       type: object
@@ -453,9 +686,6 @@ components:
         payCycle:
           type: string
           format: integer
-          nullable: true
-        workItemId:
-          type: string
           nullable: true
     DeaConsentV2:
       required:
@@ -493,25 +723,12 @@ components:
       properties:
         status:
           $ref: '#/components/schemas/IncomeVerificationStatusV2'
-        evidenceState:
-          $ref: '#/components/schemas/EvidenceState'
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentInfoV2'
         result:
           $ref: '#/components/schemas/IncomeVerificationResultV2'
-    EvidenceState:
-      type: object
-      properties:
-        bankStatements:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocumentInfoV2'
-        payslips:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocumentInfoV2'
-        unknown:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocumentInfoV2'
     IncomeVerificationResultV2:
       type: object
       properties:
@@ -559,7 +776,7 @@ components:
       type: string
       enum:
         - InProgress
-        - ReferedToFraud
+        - ReferredToFraud
         - ConfirmedFraud
         - Success
         - Failed
@@ -583,6 +800,206 @@ components:
           format: date
         amount:
           type: number
+    BankStatement:
+      required:
+        - transactions
+      type: object
+      properties:
+        creationDate:
+          type: string
+          format: date-time
+        name:
+          type: string
+        address:
+          type: string
+        bankAccount:
+          $ref: '#/components/schemas/BankAccount'
+        balanceBroughtForward:
+          type: number
+        statementStartDate:
+          type: string
+          format: date
+        statementEndDate:
+          type: string
+          format: date
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        grossIncome:
+          type: number
+        nettIncome:
+          type: number
+        balanceValidated:
+          type: boolean
+        statementDate:
+          type: string
+          format: date
+    BankAccount:
+      type: object
+      properties:
+        accountType:
+          type: string
+        accountNumber:
+          type: string
+        bank:
+          type: string
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+        date:
+          type: string
+          format: date
+        description:
+          type: string
+        balance:
+          type: number
+        transactionValue:
+          type: number
+        failureIndicator:
+          type: boolean
+        inPrimaryIncomeStream:
+          type: boolean
+        thirdParty:
+          $ref: '#/components/schemas/ThirdParty'
+        category:
+          type: string
+        transactionType:
+          type: string
+        tags:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    ThirdParty:
+      type: object
+      properties:
+        name:
+          type: string
+        subDivision:
+          type:
+            string
+    Payslip:
+      type: object
+      properties:
+        dateEngaged:
+          type: string
+          format: date
+        dateOfBirth:
+          type: string
+          format: date
+        emailAddress:
+          type: string
+        employeeNumber:
+          type: string
+        employer:
+          type: string
+        title:
+          type: string
+        initials:
+          type: string
+        fullName:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        grossIncome:
+          type: number
+        nettIncome:
+          type: number
+        idNumber:
+          type: string
+        jobTitle:
+          type: string
+        bankAccountNumber:
+          type: string
+        employeeAddress:
+          type: string
+        passportNumber:
+          type: string
+        taxNumber:
+          type: string
+        timestamp:
+          type: string
+          format: date
+        totalDeductions:
+          type: number
+        totalEarnings:
+          type: number
+        uif:
+          type: number
+        companyUifContribution:
+          type: number
+        leaveBalance:
+          type: string
+    FraudHistoryItem:
+      type: object
+      properties:
+        createdDate:
+          type: string
+          format: date-time
+        agent:
+          type: string
+        decision:
+          type: string
+          enum:
+            - agentSuspectedFraud
+            - agentConfirmedFraud
+            - agentConfirmedNotFraud
+            - automatedSuspectedFraud
+            - automatedConfirmedFraud
+            - automatedNothingSuspiciousDetected
+        reason:
+          type: string
+        fraudHints:
+          type: array
+          items:
+            $ref: "#/components/schemas/FraudHint"
+    FraudHint:
+      type: object
+      properties:
+        hintId:
+          type: string
+          enum:
+            - suspiciousCreatorTool
+            - documentTamperLikely
+            - accountNumberChanged
+            - irregularAtmWithdrawalFees
+            - suspiciousLastEdit
+        riskCategory:
+          type: string
+          enum:
+            - undetermined
+            - unknown
+            - low
+            - moderate
+            - high
+    DocumentStatus:
+      type: string
+      enum:
+        - DataExtractionFailed
+        - TooOld
+        - ApplicantMatchFailed
+        - DataExtractionCompleted
+        - SuspectedFraud
+        - ConfirmedFraud
+        - Used
+    DocumentSource:
+      type: string
+      enum:
+        - Upload
+        - Email
+        - DEA
+        - UploadRequest
+    DocumentType:
+      type: string
+      enum:
+        - BankStatement
+        - Payslip
+        - Unknown
   securitySchemes:
     bearerAuth:
       type: oauth2
@@ -596,6 +1013,8 @@ components:
             'incomeVerification:state:read': Read the most recent state for an income verification
             'incomeVerification:file:upload': Upload documents to a income verification
             'incomeVerification:manualCapture:create': Capture the nett income for an Income Verification
+            'incomeVerification:fraud:create': Suspect, and confirm fraud
+            'incomeVerification:document:read': Read the state for a document
     ApiKeyAuth:
       type: apiKey
       name: apiKey
