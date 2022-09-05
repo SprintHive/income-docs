@@ -133,7 +133,7 @@ See the ```v2/incomeVerification/${incomeVerificationId}/state``` endpoint for m
 }
 ```
 
-### Detecting successfully detected income
+### How to know if an income has been successfully detected
 
 When the status is SUCCESS and result.status is "WITHIN_TOLERANCE"
 
