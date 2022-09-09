@@ -789,8 +789,8 @@ components:
       type: string
       enum:
         - None
-        - WithinTolerance
-        - OutsideTolerance
+        - HighConfidence
+        - LowConfidence
         - Confirmed
     Payment:
       type: object

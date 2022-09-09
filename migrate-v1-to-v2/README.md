@@ -87,7 +87,7 @@ Response:
     },
     "result": {
         "method": "AUTOMATED",
-        "status": "WITHIN_TOLERANCE",
+        "status": "HIGH_CONFIDENCE",
         "accountHolderName": "Mr Raoul McClureBee",
         "bankName": "Nedbank",
         "bankAccountNumber": "1180234567",
@@ -135,6 +135,6 @@ See the ```v2/incomeVerification/${incomeVerificationId}/state``` endpoint for m
 
 ### How to know if an income has been successfully detected
 
-When the status is SUCCESS and result.status is "WITHIN_TOLERANCE"
+When the status is SUCCESS and result.status is "HIGH_CONFIDENCE"
 
 > Any other result can be sent for manual review

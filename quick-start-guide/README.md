@@ -78,7 +78,7 @@ Response:
   },
   "result": {
     "method": "AUTOMATED",
-    "status": "WITHIN_TOLERANCE",
+    "status": "HIGH_CONFIDENCE",
     "accountHolderName": "Rev Thomas Bayes",
     "bankName": "Capitec Bank",
     "bankAccountNumber": "1234567890",
