@@ -66,16 +66,15 @@ Response:
 ```json
 {
   "status": "SUCCESS",
-  "evidenceState": {
-    "bankStatements": [
-      {
-        "documentId": "904e24e2-882a-485b-a3cd-0dc916211442",
-        "documentHash": "4306ae617022feac27cd97b31d933163292b315c"
-      }
-    ],
-    "payslips": [],
-    "unknown": []
-  },
+  "documents": [
+    {
+      "documentId": "d3107619-26d9-4093-a7e4-79fd9d4caeb2",
+      "documentHash": "36420742ea5a848249bac915e7ba3c951cdda395",
+      "type": "BANK_STATEMENT",
+      "received": "2022-08-11T10:20:30.478",
+      "status": "DATA_EXTRACTION_COMPLETED"
+    }
+  ],
   "result": {
     "method": "AUTOMATED",
     "status": "HIGH_CONFIDENCE",
