@@ -943,6 +943,9 @@ components:
           format: date-time
         agent:
           type: string
+        documentId:
+          type: string
+          nullable: true
         decision:
           type: string
           enum:
