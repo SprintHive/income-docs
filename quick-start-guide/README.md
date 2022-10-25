@@ -17,7 +17,7 @@ These are the 3 main API calls which will be made between your system and Sprint
 * Upload a bank statement - a Multipart form with a file parameter
 * Get the income verification state - a GET request which returns JSON describing the latest state of the income verification request
 
-![quick-start-guid-sequence-diagram](images/quick-start-sequence-diagram-1.png)
+![quick-start-guide-sequence-diagram](images/quick-start-sequence-diagram-1.png)
 
 ### 1. Create an income verification request
 
