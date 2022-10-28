@@ -862,6 +862,8 @@ components:
           type: boolean
         inPrimaryIncomeStream:
           type: boolean
+        inOtherIncomeStream:
+          type: boolean
         thirdParty:
           $ref: '#/components/schemas/ThirdParty'
         category:
