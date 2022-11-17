@@ -21,7 +21,7 @@ These are the 3 main API calls which will be made between your system and Sprint
 
 ### 1. Create an income verification request
 
-Endpoint: ```v2/incomeVerification```  
+Endpoint: ```income/v2/incomeVerification```  
 Method: POST  
 Body:
 ```json
@@ -44,7 +44,7 @@ Response:
 
 ### 2. Upload a proof of income
 
-Endpoint: ```v2/incomeVerification/{incomeVerificationId}/document```  
+Endpoint: ```income/v2/incomeVerification/{incomeVerificationId}/document```  
 Method: POST  
 Body:
 ```
@@ -60,7 +60,7 @@ Response:
 
 ### Fetching the income verification state
 
-Endpoint: ```v2/incomeVerification/${incomeVerificationId}/state```  
+Endpoint: ```income/v2/incomeVerification/${incomeVerificationId}/state```  
 Method: GET  
 Response:
 ```json

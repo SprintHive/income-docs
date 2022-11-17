@@ -1,0 +1,39 @@
+actor "Applicant" as applicant
+participant "Your system" as yourSystem
+participant "Mail Box" as mailBox
+participant "Sprinthive" as sprinthive
+
+applicant->yourSystem: Applies for product
+yourSystem->yourSystem:Creates and pre-approves applicant
+yourSystem->sprinthive:Create income verification
+sprinthive->yourSystem:Responds with income verification created
+yourSystem->applicant:Instructs applicant to email their documents
+applicant->mailBox:Applicant sends email with documents attatched
+mailBox->sprinthive:Uploads documents
+
+note right of yourSystem: At this point your system\nis not aware of the\nnew dcoument
+
+activate sprinthive
+sprinthive->sprinthive:Extracts document
+sprinthive->sprinthive:Validates document
+sprinthive->sprinthive:Matches document to applicant
+sprinthive->yourSystem:Sends Document Processed Notftification
+deactivate sprinthive
+
+
+activate yourSystem
+yourSystem->sprinthive:Fetch raw file data
+yourSystem->yourSystem: Store document
+deactivate yourSystem
+
+
+activate sprinthive
+sprinthive->sprinthive:Determines income
+sprinthive->yourSystem:Sends Income Status Changed Notftification
+deactivate sprinthive
+
+activate yourSystem
+yourSystem->sprinthive:Fetch income verification result
+yourSystem->yourSystem:Process the result
+yourSystem->applicant: Notify applicant of the result
+deactivate yourSystem

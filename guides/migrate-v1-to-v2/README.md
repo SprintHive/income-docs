@@ -132,8 +132,8 @@ See the ```v2/incomeVerification/${incomeVerificationId}/state``` endpoint for m
 }
 ```
 
-### How to know if an income has been successfully detected
+### How to route the applications based on status
 
-When the status is SUCCESS and result.status is "HIGH_CONFIDENCE"
-
-> Any other result can be sent for manual review
+When the status is SUCCESS and result.status is "HIGH_CONFIDENCE" the income has been determined so the application can proceed to the next step in your process
+When the status is CONFIRMED_FRAUD the application should be sent to the fraud department for review
+When the status is FAILED the application can be sent for manual review
