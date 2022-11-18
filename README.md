@@ -9,6 +9,7 @@ A project to describe how to integrate with our income verification API.
 [Notifications](guides/notifications/Notifications.md)
 
 ## API
+[Open API spec](openApi/openapi-public-v2.yaml)  
 [Create Income Verification Request](api/CreateIncomeVerificationRequest.md)  
 [Get Income Verification State](api/GetIncomeVerificationState.md)  
 [Download Document](api/GetDocumentContent.md)  
