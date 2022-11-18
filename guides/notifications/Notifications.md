@@ -49,46 +49,4 @@ An example of the notification payload
 
 Your system can use the incomeVerificationId to fetch the latest state ([for more info](../../api/GetIncomeVerificationState.md))  
 The response has a list of documents that are linked to the income verification request and can be used to download the 
-document ([for more info](../../api/GetDocumentContent.md)) and then upload it to your system's file storage. 
-
-```json
-{
-  "status": "SUCCESS",
-  "documents": [
-    {
-      "documentId": "d3107619-26d9-4093-a7e4-79fd9d4caeb2",
-      "documentHash": "36420742ea5a848249bac915e7ba3c951cdda395",
-      "type": "BANK_STATEMENT",
-      "received": "2022-08-11T10:20:30.478",
-      "status": "DATA_EXTRACTION_COMPLETED"
-    }
-  ],
-  "result": {
-    "method": "AUTOMATED",
-    "status": "HIGH_CONFIDENCE",
-    "accountHolderName": "Rev Thomas Bayes",
-    "bankName": "Capitec Bank",
-    "bankAccountNumber": "1234567890",
-    "analysisResult": {
-      "primaryIncome": {
-        "declaredNettIncome": 20000,
-        "detectedNettIncome": 19226.92,
-        "confidence": 0.9892,
-        "variance": -0.04021,
-        "payDates": [
-          {
-            "date": "2021-05-01",
-            "amount": 19226.92
-          },
-          {
-            "date": "2021-04-28",
-            "amount": 19226.92
-          }
-        ],
-        "payDay": 28,
-        "payCycle": 30
-      }
-    }
-  }
-}
-```
+document ([for more info](../../api/GetDocumentContent.md)) and then upload it to your system's file storage.
