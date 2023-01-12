@@ -1,19 +1,71 @@
 {
 	"info": {
-		"_postman_id": "1a6166a6-6547-46cd-ab6a-7a86ba75a5c9",
+		"_postman_id": "1584dac2-6a54-48cf-b495-b88c0b2ffc76",
 		"name": "Income quick start",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "2598189"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "Create Income Verification",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "audience",
+							"value": {
+								"a8a11202-73dc-4730-b08e-d41bdbddd760": "{{audience}}"
+							},
+							"type": "any"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "{{authEndpoint}}",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "{{clientSecret}}",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "{{clientId}}",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "auth0",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "apikey",
+						"value": "{{apiKey}}",
+						"type": "default"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"correlationId\": \"quick-start-1\",\n    \"primaryIncome\": {\n        \"nettIncome\": \"20000\",\n        \"grossIncome\": \"25000\"\n    }\n}",
+					"raw": "{\n    \"correlationId\": \"jon-test-4\",\n    \"primaryIncome\": {\n        \"grossIncome\": \"5000\",\n        \"nettIncome\": \"4300\"\n    },\n    \"config\": {\n        \"minTransactionDaysRequired\": 5,\n        \"limitTransactionsByCutOffDate\": true,\n        \"maxAgeDays\": {\n            \"bank-statement\": 1000,\n            \"payslip\": 1000\n        }\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -36,6 +88,53 @@
 		{
 			"name": "Upload file",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "audience",
+							"value": {
+								"a8a11202-73dc-4730-b08e-d41bdbddd760": "{{audience}}"
+							},
+							"type": "any"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "{{authEndpoint}}",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "{{clientSecret}}",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "{{clientId}}",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "auth0",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
 					{
@@ -57,7 +156,7 @@
 							"key": "file",
 							"description": "An pdf of a bank statement or a payslip",
 							"type": "file",
-							"src": "/Users/jon/projects/sprinthive/v1/TestData/bankstatement.pdf"
+							"src": "/Users/jon/projects/sprinthive/TestData/Income/latest/nedbank-happy-4300.pdf"
 						}
 					]
 				},
@@ -83,30 +182,30 @@
 					"type": "oauth2",
 					"oauth2": [
 						{
-							"key": "scope",
-							"value": "",
-							"type": "string"
-						},
-						{
-							"key": "clientSecret",
-							"value": "s0UFiMK5tV6C-t4_avhwcaRJHYKSl6mYzjdiDIEWAYNHTHklZUxdGar1dIhlwvr6",
-							"type": "string"
-						},
-						{
-							"key": "clientId",
-							"value": "Tssy08PFF0HXcvL0OJeU0Xip48YzHMw0",
-							"type": "string"
-						},
-						{
 							"key": "audience",
 							"value": {
-								"a8a11202-73dc-4730-b08e-d41bdbddd760": "sprinthive.dev.api-gateway"
+								"a8a11202-73dc-4730-b08e-d41bdbddd760": "{{audience}}"
 							},
 							"type": "any"
 						},
 						{
 							"key": "accessTokenUrl",
-							"value": "https://auth.nonprod.sprinthive.com/oauth/token",
+							"value": "{{authEndpoint}}",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "{{clientSecret}}",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "{{clientId}}",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "",
 							"type": "string"
 						},
 						{
@@ -127,7 +226,13 @@
 					]
 				},
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "apikey",
+						"value": "{{apiKey}}",
+						"type": "default"
+					}
+				],
 				"url": {
 					"raw": "{{income}}/v2/incomeVerification/{{incomeVerificationId}}/state",
 					"host": [
