@@ -103,7 +103,12 @@ How often the applicant gets paid (e.g. 7 for weekly, 14 for fortnightly, 30 for
 ### incomeDetectorStrategy
 
 Different income detector strategies can be used depending on how the applicant is employed.  
+
+> Defaults to average
+
 The following strategies are available by default:
 
-average - used to detect income for an applicant that earns a regular income  
-irregular - use to detect income for self-employed applicants
+ - min - When using multiple months the system will find the consistent income steam over the selected months and use the smallest amount  
+ - average -When using multiple months the system will find the consistent income steam over the selected months and use the average of the amounts found  
+ - max - When using multiple months the system will find the consistent income steam over the selected months and use the largest amount  
+ - irregular - The system will add up all the income transactions excluding specific income transactions, like loans received, and calculate the average of the monthly totals  
