@@ -438,6 +438,9 @@ components:
         hash:
           type: string
           nullable: true
+        emailId:
+          type: string
+          nullable: true
         received:
           type: string
           format: date-time
@@ -498,14 +501,22 @@ components:
           type: boolean
         determineIncomeOnTimeOut:
           type: boolean
+        passHigherThanDeclaredIncome:
+          type: boolean
         maxAgeDays:
-          type: object
-          additionalProperties:
-            type: integer
-            format: int32
+          $ref: '#/components/schemas/MaxAgeDaysConfig'
         incomeDetectorStrategy:
           type: string
           nullable: true
+    MaxAgeDaysConfig:
+      type: object
+      properties:
+        bank-statement:
+          type: integer
+          format: int32
+        payslip:
+          type: integer
+          format: int32
     ApplicantDetails:
       type: object
       properties:
@@ -645,6 +656,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/FraudHistoryItem"
+        profileAnalysis:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileHistoryItem"
     SuspectedFraudV2:
       type: object
       properties:
@@ -663,13 +678,16 @@ components:
     IncomeDeterminedV2:
       type: object
       required:
+        - primaryIncome
         - payments
       properties:
-        payments:
+        primaryIncome:
+          $ref: "#/components/schemas/IncomeDeterminedItem"
+        otherIncome:
           type: array
           nullable: false
           items:
-            $ref: "#/components/schemas/Payment"
+            $ref: "#/components/schemas/IncomeDeterminedItem"
         accountHolderName:
           type: string
           nullable: true
@@ -678,14 +696,6 @@ components:
           nullable: true
         bankAccountNumber:
           type: string
-          nullable: true
-        payDay:
-          type: string
-          format: integer
-          nullable: true
-        payCycle:
-          type: string
-          format: integer
           nullable: true
     DeaConsentV2:
       required:
@@ -792,6 +802,24 @@ components:
         - HighConfidence
         - LowConfidence
         - Confirmed
+    IncomeDeterminedItem:
+      type: object
+      properties:
+        payments:
+          type: array
+          nullable: false
+          items:
+            $ref: "#/components/schemas/Payment"
+        declaredAmount:
+          type: number
+        payDay:
+          type: string
+          format: integer
+          nullable: true
+        payCycle:
+          type: string
+          format: integer
+          nullable: true
     Payment:
       type: object
       properties:
@@ -949,20 +977,23 @@ components:
           type: string
           nullable: true
         decision:
-          type: string
-          enum:
-            - agentSuspectedFraud
-            - agentConfirmedFraud
-            - agentConfirmedNotFraud
-            - automatedSuspectedFraud
-            - automatedConfirmedFraud
-            - automatedNothingSuspiciousDetected
+          $ref: "#/components/schemas/Decision"
         reason:
           type: string
         fraudHints:
           type: array
           items:
             $ref: "#/components/schemas/FraudHint"
+    ProfileHistoryItem:
+      type: object
+      properties:
+        createdDate:
+          type: string
+          format: date-time
+        profileHints:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProfileHint"
     FraudHint:
       type: object
       properties:
@@ -974,6 +1005,9 @@ components:
             - accountNumberChanged
             - irregularAtmWithdrawalFees
             - suspiciousLastEdit
+            - suspiciousSubject
+            - suspiciousKeywords
+            - suspiciousProducer
         riskCategory:
           type: string
           enum:
@@ -982,16 +1016,42 @@ components:
             - low
             - moderate
             - high
+    ProfileHint:
+      type: object
+      properties:
+        hintId:
+          type: string
+          enum:
+            - steepSpendingCurve
+        riskCategory:
+          $ref: "#/components/schemas/RiskCategory"
+    RiskCategory:
+      type: string
+      enum:
+        - undetermined
+        - unknown
+        - low
+        - moderate
+        - high
+    Decision:
+      type: string
+      enum:
+        - agentSuspectedFraud
+        - agentConfirmedFraud
+        - agentConfirmedNotFraud
+        - automatedSuspectedFraud
+        - automatedConfirmedFraud
+        - automatedNothingSuspiciousDetected
     DocumentStatus:
       type: string
       enum:
+        - Received
         - DataExtractionFailed
         - TooOld
         - ApplicantMatchFailed
         - DataExtractionCompleted
         - SuspectedFraud
         - ConfirmedFraud
-        - Used
     DocumentSource:
       type: string
       enum:
