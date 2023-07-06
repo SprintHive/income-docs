@@ -47,6 +47,6 @@ An example of the notification payload
 }
 ```
 
-Your system can use the incomeVerificationId to fetch the latest state ([for more info](../../api/GetIncomeVerificationState.md))  
+Your system can use the incomeVerificationId to fetch the latest state ([for more info](../../api/v2/GetIncomeVerificationState.md))  
 The response has a list of documents that are linked to the income verification request and can be used to download the 
-document ([for more info](../../api/GetDocumentContent.md)) and then upload it to your system's file storage.
+document ([for more info](../../api/v2/GetDocumentContent.md)) and then upload it to your system's file storage.

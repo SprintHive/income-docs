@@ -10,7 +10,8 @@ A project to describe how to integrate with our income verification API.
 
 ## API
 [Open API spec](openApi/openapi-public-v2.yaml)  
-[Create Income Verification Request](api/CreateIncomeVerificationRequest.md)  
-[Get Income Verification State](api/GetIncomeVerificationState.md)  
-[Download Document](api/GetDocumentContent.md)  
+[Create Income Verification Request](api/v2/CreateIncomeVerificationRequest.md)  
+[Get Income Verification State](api/v2/GetIncomeVerificationState.md)  
+[Download Document](api/v2/GetDocumentContent.md)  
+[Sending income confirmation](api/v2/IncomeConfirmation.md)  
 
