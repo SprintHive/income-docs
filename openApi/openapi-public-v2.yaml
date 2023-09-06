@@ -395,6 +395,37 @@ paths:
       security:
         - bearerAuth:
             - 'incomeVerification:state:read'
+  '/v2/incomeVerification/{incomeVerificationId}/confirmation':
+    post:
+      tags:
+        - IncomeVerificationV2
+      summary: Capture a income confirmation
+      operationId: incomeConfirmation
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          description: Income verification id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IncomeConfirmationV2'
+        required: true
+      responses:
+        '200':
+          description: default response
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:confirmation:update'
 components:
   schemas:
     ErrorDetail:
@@ -525,6 +556,9 @@ components:
           format: date-time
           nullable: true
         emailAddress:
+          type: string
+          nullable: true
+        mobileNumber:
           type: string
           nullable: true
         currentEmployerName:
@@ -741,6 +775,8 @@ components:
             $ref: '#/components/schemas/DocumentInfoV2'
         result:
           $ref: '#/components/schemas/IncomeVerificationResultV2'
+        confirmation:
+          $ref: '#/components/schemas/IncomeConfirmationV2'
     IncomeVerificationResultV2:
       type: object
       properties:
@@ -786,39 +822,38 @@ components:
           type: integer
     IncomeVerificationStatusV2:
       type: string
-      enum:
-        - InProgress
-        - ReferredToFraud
-        - ConfirmedFraud
-        - Success
-        - Failed
+      x-extensible-enum:
+        - IN_PROGRESS
+        - REFERRED_TO_FRAUD
+        - CONFIRMED_FRAUD
+        - SUCCESS
+        - FAILED
     IncomeVerificationSubStatusV2:
       type: string
-      enum:
-        - WaitingForDocuments
-        - ProblemsWithDocuments
-        - DataExtractionFailed
-        - NoIncomeDetected
-        - LowIncomeConfidence
-        - SuspectedDocumentFraud
-        - SuspectedCaseFraud
-        - ConfirmedDocumentFraud
-        - ManualConfirmedFraud
-        - ConfirmedCaseFraud
-        - HighIncomeConfidence
-        - ManuallyCaptured
+      x-extensible-enum:
+        - WAITING_FOR_DOCUMENTS
+        - PROBLEMS_WITH_DOCUMENTS
+        - DATA_EXTRACTION_FAILED
+        - NO_INCOME_DETECTED
+        - LOW_INCOME_CONFIDENCE
+        - SUSPECTED_DOCUMENT_FRAUD
+        - SUSPECTED_CASE_FRAUD
+        - CONFIRMED_DOCUMENT_FRAUD
+        - MANUAL_CONFIRMED_FRAUD
+        - CONFIRMED_CASE_FRAUD
+        - HIGH_INCOME_CONFIDENCE
+        - MANUALLY_CAPTURED
     ResultMethod:
       type: string
-      enum:
-        - Automated
-        - Manual
+      x-extensible-enum:
+        - AUTOMATED
+        - MANUAL
     ResultStatus:
       type: string
-      enum:
-        - None
-        - HighConfidence
-        - LowConfidence
-        - Confirmed
+      x-extensible-enum:
+        - NONE
+        - HIGH_CONFIDENCE
+        - LOW_CONFIDENCE
     IncomeDeterminedItem:
       type: object
       properties:
@@ -1016,72 +1051,101 @@ components:
       properties:
         hintId:
           type: string
-          enum:
-            - suspiciousCreatorTool
-            - documentTamperLikely
-            - accountNumberChanged
-            - irregularAtmWithdrawalFees
-            - suspiciousLastEdit
-            - suspiciousSubject
-            - suspiciousKeywords
-            - suspiciousProducer
+          x-extensible-enum:
+            - SUSPICIOUS_CREATOR_TOOL
+            - DOCUMENT_TAMPER_LIKELY
+            - ACCOUNT_NUMBER_CHANGED
+            - IRREGULAR_ATM_WITHDRAWAL_FEES
+            - SUSPICIOUS_LAST_EDIT
+            - SUSPICIOUS_SUBJECT
+            - SUSPICIOUS_KEYWORDS
+            - SUSPICIOUS_PRODUCER
         riskCategory:
           type: string
-          enum:
-            - undetermined
-            - unknown
-            - low
-            - moderate
-            - high
+          x-extensible-enum:
+            - UNDETERMINED
+            - UNKNOWN
+            - LOW
+            - MODERATE
+            - HIGH
     ProfileHint:
       type: object
       properties:
         hintId:
           type: string
-          enum:
-            - steepSpendingCurve
+          x-extensible-enum:
+            - STEEP_SPENDING_CURVE
         riskCategory:
           $ref: "#/components/schemas/RiskCategory"
     RiskCategory:
       type: string
-      enum:
-        - undetermined
-        - unknown
-        - low
-        - moderate
-        - high
+      x-extensible-enum:
+        - UNDETERMINED
+        - UNKNOWN
+        - LOW
+        - MODERATE
+        - HIGH
     Decision:
       type: string
-      enum:
-        - agentSuspectedFraud
-        - agentConfirmedFraud
-        - agentConfirmedNotFraud
-        - automatedSuspectedFraud
-        - automatedConfirmedFraud
-        - automatedNothingSuspiciousDetected
+      x-extensible-enum:
+        - AGENT_SUSPECTED_FRAUD
+        - AGENT_CONFIRMED_FRAUD
+        - AGENT_CONFIRMED_NOT_FRAUD
+        - AUTOMATED_SUSPECTED_FRAUD
+        - AUTOMATED_CONFIRMED_FRAUD
+        - AUTOMATED_NOTHING_SUSPICIOUS_DETECTED
     DocumentStatus:
       type: string
-      enum:
-        - Received
-        - DataExtractionFailed
-        - TooOld
-        - ApplicantMatchFailed
-        - DataExtractionCompleted
-        - SuspectedFraud
-        - ConfirmedFraud
+      x-extensible-enum:
+        - RECEIVED
+        - DATA_EXTRACTION_FAILED
+        - TOO_OLD
+        - APPLICANT_MATCH_FAILED
+        - DATA_EXTRACTION_COMPLETED
+        - SUSPECTED_FRAUD
+        - CONFIRMED_FRAUD
     DocumentSource:
       type: string
-      enum:
-        - Upload
-        - Email
+      x-extensible-enum:
+        - UPLOAD
+        - EMAIL
         - DEA
-        - UploadRequest
+        - UPLOAD_REQUEST
     DocumentType:
       type: string
-      enum:
-        - BankStatement
-        - Payslip
-        - Unknown
+      x-extensible-enum:
+        - BANK_STATEMENT
+        - PAYSLIP
+        - UNKNOWN
+    IncomeConfirmationV2:
+      type: object
+      required:
+        - primaryIncome
+      properties:
+        primaryIncome:
+          $ref: '#/components/schemas/Declaration'
+        otherIncome:
+          type: array
+          items:
+            $ref: '#/components/schemas/Declaration'
+        agentId:
+          type: string
+        applicationResult:
+          type: string
+          x-extensible-enum:
+            - ACCEPTED
+            - DECLINED
+        documents:
+          type: array
+          items:
+            type: object
+            required:
+              - documentId
+            properties:
+              documentId:
+                type: string
+              documentHash:
+                type: string
   securitySchemes:
     bearerAuth:
       type: oauth2
@@ -1097,6 +1161,7 @@ components:
             'incomeVerification:manualCapture:create': Capture the nett income for an Income Verification
             'incomeVerification:fraud:create': Suspect, and confirm fraud
             'incomeVerification:document:read': Read the state for a document
+            'incomeVerification:confirmation:update': Record the confirmation result for an Income Verification case
     ApiKeyAuth:
       type: apiKey
       name: apiKey
