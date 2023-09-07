@@ -1,9 +1,10 @@
 # Income documentation
 
-A project to describe how to integrate with our income verification API.
+A project to describe how to integrate with SprintHive's income verification API.
 
 ## Guides
 
+[Security](guides/security/CreatingJsonWebToken.md)  
 [Quick Start](guides/quick-start-guide)  
 [Migrating from V1 to V2](guides/migrate-v1-to-v2)  
 [Notifications](guides/notifications/Notifications.md)
