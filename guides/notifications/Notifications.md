@@ -2,6 +2,9 @@
 
 There are two different notifications available namely Document Processed and Status Changed notifications.
 
+## Prerequisites
+* You have read and understand the security section [click here for more details](../security/CreatingJsonWebToken.md)
+
 ## The process
 
 Applicant: The person who is applying for the service or product.  

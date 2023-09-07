@@ -2,6 +2,9 @@
 
 The purpose of this guide is to explain how to migrate from v1 to v2
 
+## Prerequisites
+* You have read and understand the security section [click here for more details](../security/CreatingJsonWebToken.md)
+
 ## Creating an income verification request
 
  * The structure of the payload has changed to support the declaration of primary and other income

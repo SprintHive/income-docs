@@ -2,6 +2,9 @@
 
 The following endpoint can be used to post the income that was used for the application to SprintHive.
 
+## Prerequisites
+* You have read and understand the security section [click here for more details](../../guides/security/CreatingJsonWebToken.md)
+
 Endpoint: ```income/v2/incomeVerification/${incomeVerificationId}/confirmation```  
 Method: POST  
 Body:
@@ -27,7 +30,7 @@ Body:
 }
 ```
 
-The confirmation is returned in the [Get Income Verification State](api/v2/GetIncomeVerificationState.md) endpoint. 
+The confirmation is returned in the [Get Income Verification State](/api/v2/GetIncomeVerificationState.md) endpoint. 
 
 ```json
 {

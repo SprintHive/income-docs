@@ -4,7 +4,8 @@ The purpose of the quick start guide is to provide the simplest scenario to inte
 
 ## Prerequisites
 
- * Client ID and Client Secret - this will be provided by SprintHive, it is used to create an JWT token which will be required when calling the Income API
+ * A Json Web Token - please see the [security section for more details](../security/CreatingJsonWebToken.md)
+ * API Key - this will be provided by SprintHive and must be added to the header of the request
  * An environment to test against - this will provisioned by SprintHive
  * An example bank statement
 

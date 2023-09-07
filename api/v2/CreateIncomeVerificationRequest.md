@@ -2,6 +2,9 @@
 
 This endpoint is used to create an income verification request.  
 
+## Prerequisites
+* You have read and understand the security section [click here for more details](../../guides/security/CreatingJsonWebToken.md)
+
 Endpoint: ```income/v2/incomeVerification```  
 Method: POST  
 Body:
