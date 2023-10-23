@@ -114,29 +114,9 @@ Response:
 ```
 
 ### What do the different Statuses mean?
-| Status            | Description                                                                                                                                                                                                                          |
-|-------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| IN_PROGRESS       | Waiting for documents to determine income                                                                                                                                                                                            |
-| REFERRED_TO_FRAUD | The income verification request has been suspected of fraud                                                                                                                                                                          |
-| SUCCESS           | The income verification request has been processed                                                                                                                                                                                   |
-| FAILED            | The income request can fail for the following reasons<ul><li>Not enough documents have been uploaded to meet the business requirements</li><li>Income was detected but was outside the tolerance (confidence is below 95%)</li></ul> |
-| CONFIRMED_FRAUD   | Either an agent has confirmed the income verification to be fraudulent or the system has detected high risk fraud                                                                                                                    |
+
+For more information about the statuses that are available in V2 [see](../../api/v2/GetIncomeVerificationState.md)
 
 ### When will the web hook notification be sent?
 
-The web hook will be notified when the income verification reaches SUCCESS, FAILED or CONFIRMED_FRAUD state.
-
-The message that is posted by the web hook has not been change from v1 to v2 but getting the result payload has changed. 
-See the ```v2/incomeVerification/${incomeVerificationId}/state``` endpoint for more info. 
-```json
-{
-  "incomeVerificationId": "some-uuid",
-  "correlationId": "some-uuid"
-}
-```
-
-### How to route the applications based on status
-
-When the status is SUCCESS and result.status is "HIGH_CONFIDENCE" the income has been determined so the application can proceed to the next step in your process
-When the status is CONFIRMED_FRAUD the application should be sent to the fraud department for review
-When the status is FAILED the application can be sent for manual review
+For more information about the notifications please [see](../notifications/Notifications.md)
