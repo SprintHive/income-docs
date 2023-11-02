@@ -81,3 +81,19 @@ The following table explains the status and subStatus in the example response ab
 When the status is SUCCESS and result.status is "HIGH_CONFIDENCE" the income has been determined so the application can proceed to the next step in your process.  
 When the status is CONFIRMED_FRAUD the application should be sent to the fraud department for review.  
 When the status is FAILED the application can be sent for manual review.  
+
+## What do the different Document Statuses mean?
+
+Document statuses can be useful when the case status is IN_PROGRESS and the sub status is PROBLEMS_WITH_DOCUMENTS. 
+The document status can be used to determine what the problem is and communication to the customer can be tailored accordingly.
+
+| Status                       | Description                                                                                                                                                  |
+|------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| RECEIVED                     | The starting state for a document once it has been received                                                                                                  |
+| DATA_EXTRACTION_FAILED       | This means the data could not be extracted from the document, the document will not be used to detect income                                                 |
+| TOO_OLD                      | The document is too old as per the business rules, the document will not be used to detect income                                                            |
+| APPLICANT_MATCH_FAILED       | The extracted data does not match the declared data                                                                                                          |
+| EXTRACTION_TYPE_NOT_ENABLED  | This status means the document was extracted using an extraction method that is not configured (e.g. OCR) , the document will not be used to detect income   |   
+| DATA_EXTRACTION_COMPLETED    | This means that the data was extracted and the document will be used to detect income                                                                        |
+| SUSPECTED_FRAUD              | This means that one of the document tampering checks failed and the whole case should be reviewed by the fraud team (Automated fraud checks must be enabled) |
+| CONFIRMED_FRAUD              | This can happen if the fraud team confirms fraud or if a high risk document tampering check has failed (Automated fraud checks must be enabled)              |
