@@ -77,7 +77,6 @@ Response:
 ```json
 {
   "config": {
-    "passHigherThanDeclaredIncome": true,
     "minTransactionDaysRequired": 65,
     "minPayslipsRequired": 3,
     "minPayslipsDaysRequired": 84,
@@ -112,7 +111,6 @@ Response:
 ```json
 {
   "config": {
-    "passHigherThanDeclaredIncome": true,
     "minTransactionDaysRequired": 65,
     "minPayslipsRequired": 1,
     "bankStatementAndPayslipRequired": false,
