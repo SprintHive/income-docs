@@ -64,7 +64,6 @@ Response:
     "minTransactionDaysRequired": 5,
     "minPayslipsRequired": 1,
     "bankStatementAndPayslipRequired": false,
-    "limitTransactionsByCutOffDate": true,
     "maxAgeDays": {
       "bank-statement": 90,
       "payslip": 90
@@ -81,7 +80,6 @@ Response:
     "minPayslipsRequired": 3,
     "minPayslipsDaysRequired": 84,
     "bankStatementAndPayslipRequired": false,
-    "limitTransactionsByCutOffDate": true,
     "maxAgeDays": {
       "bank-statement": 32,
       "payslip": 90
@@ -97,10 +95,9 @@ Response:
     "minTransactionDaysRequired": 5,
     "minPayslipsRequired": 3,
     "minPayslipsDaysRequired": 84,
-    "bankStatementAndPayslipRequired": false,
-    "limitTransactionsByCutOffDate": true,
+    "bankStatementAndPayslipRequired": true,
     "maxAgeDays": {
-      "bank-statement": 90,
+      "bank-statement": 32,
       "payslip": 90
     }
   }
@@ -113,8 +110,7 @@ Response:
   "config": {
     "minTransactionDaysRequired": 65,
     "minPayslipsRequired": 1,
-    "bankStatementAndPayslipRequired": false,
-    "limitTransactionsByCutOffDate": true,
+    "bankStatementAndPayslipRequired": true,
     "maxAgeDays": {
       "bank-statement": 32,
       "payslip": 90
