@@ -16,3 +16,6 @@ A project to describe how to integrate with SprintHive's income verification API
 [Download Document](api/v2/GetDocumentContent.md)  
 [Sending income confirmation](api/v2/IncomeConfirmation.md)  
 
+## Release Notes
+
+[v2.3.9 A new document type and status](releaseNotes/release-v2.3.9.md)
