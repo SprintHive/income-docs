@@ -7,12 +7,12 @@ Date: 1 March 2014
 When a document cannot be classified we would like to send notifications so that the case can be routed in accordance to the partners requirements.
 
 For example:
-- Sent the case to manual review
+- Send the case to manual review
 - Trigger the chase process
 
 When a document cannot be classified the document status will be CLASSIFICATION_FAILED with the document type of "UNKNOWN"
-When a document fails classification the income verification requests status will be IN_PROGRESS with the sub-status PROBLEMS_WITH_DOCUMENTS
-The change of the sub-status will result in notifications be sent if enabled.
+When a document fails classification the income verification request status will be IN_PROGRESS with the sub-status PROBLEMS_WITH_DOCUMENTS
+The change of the sub-status will result in notifications being sent if enabled.
 
 An example of the response from the get state endpoint:  ```income/v2/incomeVerification/${incomeVerificationId}/state```
 
@@ -36,7 +36,7 @@ An example of the response from the get state endpoint:  ```income/v2/incomeVeri
 
 ## Introducing a new document type MULTI_DOC
 
-When a document is received and it contains more than one type of document a payslip and a bank statement for example, the system will spilt the document up into multiple documents grouped by type.
+When a document is received and it contains more than one type of document, a payslip and a bank statement for example, the system will split the document up into multiple documents grouped by type.
 The original document type will be MULTI_DOC instead of UNKNOWN
 
 An example of the response from the get state endpoint:  ```income/v2/incomeVerification/${incomeVerificationId}/state```
