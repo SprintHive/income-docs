@@ -56,25 +56,25 @@ Response:
 
 The following table explains the status and subStatus in the example response above. 
 
-| Status            | SubStatus                | Description                                                                                                   |
-|-------------------|--------------------------|:--------------------------------------------------------------------------------------------------------------|
-| IN_PROGRESS       | WAITING_FOR_DOCUMENTS    | Waiting for documents to determine income                                                                     |
-| IN_PROGRESS       | PROBLEMS_WITH_DOCUMENTS  | One or more documents have been received that has failed business rules e.g. document is too old              |
-| IN_PROGRESS       | DATA_EXTRACTION_FAILED   | One or more documents have failed data extraction                                                             |
-| IN_PROGRESS       | NO_INCOME_DETECTED       | Enough documents were received to try and detect income but income could not be found                         |
-| IN_PROGRESS       | LOW_INCOME_CONFIDENCE    | Income was found but the system is not confident with the answer                                              |
-| REFERRED_TO_FRAUD | SUSPECTED_DOCUMENT_FRAUD | One or more documents has failed a fraud check                                                                |
-| REFERRED_TO_FRAUD | SUSPECTED_CASE_FRAUD     | An agent or third party system has suspected fraud                                                            |
-| SUCCESS           | HIGH_INCOME_CONFIDENCE   | Income was successfully detected and the system is confident with its answer                                  |
-| SUCCESS           | MANUALLY_CAPTURED        | Income was successfully captured by an agent or third party system                                            |
-| SUCCESS           | LOW_INCOME_CONFIDENCE    | Income was successfully detected but the system is not confident with the answer                              |
-| FAILED            | WAITING_FOR_DOCUMENTS    | Income was not detected because we did not receive enough documents within the time allowed                   |
-| FAILED            | PROBLEMS_WITH_DOCUMENTS  | Income was not detected because the business rules were not met                                               |
-| FAILED            | DATA_EXTRACTION_FAILED   | Income was not detected because the was a problem with extracting the data                                    |
-| FAILED            | NO_INCOME_DETECTED       | Enough documents were received to try and detect income but income could not be found within the time allowed |
-| CONFIRMED_FRAUD   | CONFIRMED_DOCUMENT_FRAUD | At least one document has failed a failed a check that is classified as high risk                             |
-| CONFIRMED_FRAUD   | MANUAL_CONFIRMED_FRAUD   | Either an agent or third party system has confirmed                                                           |
-| CONFIRMED_FRAUD   | CONFIRMED_CASE_FRAUD     | The case has failed a failed a check that is classified as high risk                                          |
+| Status            | SubStatus                | Description                                                                                                                 |
+|-------------------|--------------------------|:----------------------------------------------------------------------------------------------------------------------------|
+| IN_PROGRESS       | WAITING_FOR_DOCUMENTS    | Waiting for documents to determine income                                                                                   |
+| IN_PROGRESS       | PROBLEMS_WITH_DOCUMENTS  | One or more documents have been received that has failed business rules e.g. document is too old or could not be classified |
+| IN_PROGRESS       | DATA_EXTRACTION_FAILED   | One or more documents have failed data extraction                                                                           |
+| IN_PROGRESS       | NO_INCOME_DETECTED       | Enough documents were received to try and detect income but income could not be found                                       |
+| IN_PROGRESS       | LOW_INCOME_CONFIDENCE    | Income was found but the system is not confident with the answer                                                            |
+| REFERRED_TO_FRAUD | SUSPECTED_DOCUMENT_FRAUD | One or more documents has failed a fraud check                                                                              |
+| REFERRED_TO_FRAUD | SUSPECTED_CASE_FRAUD     | An agent or third party system has suspected fraud                                                                          |
+| SUCCESS           | HIGH_INCOME_CONFIDENCE   | Income was successfully detected and the system is confident with its answer                                                |
+| SUCCESS           | MANUALLY_CAPTURED        | Income was successfully captured by an agent or third party system                                                          |
+| SUCCESS           | LOW_INCOME_CONFIDENCE    | Income was successfully detected but the system is not confident with the answer                                            |
+| FAILED            | WAITING_FOR_DOCUMENTS    | Income was not detected because we did not receive enough documents within the time allowed                                 |
+| FAILED            | PROBLEMS_WITH_DOCUMENTS  | Income was not detected because the business rules were not met                                                             |
+| FAILED            | DATA_EXTRACTION_FAILED   | Income was not detected because the was a problem with extracting the data                                                  |
+| FAILED            | NO_INCOME_DETECTED       | Enough documents were received to try and detect income but income could not be found within the time allowed               |
+| CONFIRMED_FRAUD   | CONFIRMED_DOCUMENT_FRAUD | At least one document has failed a failed a check that is classified as high risk                                           |
+| CONFIRMED_FRAUD   | MANUAL_CONFIRMED_FRAUD   | Either an agent or third party system has confirmed                                                                         |
+| CONFIRMED_FRAUD   | CONFIRMED_CASE_FRAUD     | The case has failed a failed a check that is classified as high risk                                                        |
 
 ### How to route the applications based on status
 
@@ -87,13 +87,14 @@ When the status is FAILED the application can be sent for manual review.
 Document statuses can be useful when the case status is IN_PROGRESS and the sub status is PROBLEMS_WITH_DOCUMENTS. 
 The document status can be used to determine what the problem is and communication to the customer can be tailored accordingly.
 
-| Status                       | Description                                                                                                                                                  |
-|------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| RECEIVED                     | The starting state for a document once it has been received                                                                                                  |
-| DATA_EXTRACTION_FAILED       | This means the data could not be extracted from the document, the document will not be used to detect income                                                 |
-| TOO_OLD                      | The document is too old as per the business rules, the document will not be used to detect income                                                            |
-| APPLICANT_MATCH_FAILED       | The extracted data does not match the declared data                                                                                                          |
-| EXTRACTION_TYPE_NOT_ENABLED  | This status means the document was extracted using an extraction method that is not configured (e.g. OCR) , the document will not be used to detect income   |   
-| DATA_EXTRACTION_COMPLETED    | This means that the data was extracted and the document will be used to detect income                                                                        |
-| SUSPECTED_FRAUD              | This means that one of the document tampering checks failed and the whole case should be reviewed by the fraud team (Automated fraud checks must be enabled) |
-| CONFIRMED_FRAUD              | This can happen if the fraud team confirms fraud or if a high risk document tampering check has failed (Automated fraud checks must be enabled)              |
+| Status                      | Description                                                                                                                                                  |
+|-----------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| RECEIVED                    | The starting state for a document once it has been received                                                                                                  |
+| CLASSIFICATION_FAILED       | This means that the document could not be classified as a bank statement or a payslip                                                                        |
+| DATA_EXTRACTION_FAILED      | This means the data could not be extracted from the document, the document will not be used to detect income                                                 |
+| TOO_OLD                     | The document is too old as per the business rules, the document will not be used to detect income                                                            |
+| APPLICANT_MATCH_FAILED      | The extracted data does not match the declared data                                                                                                          |
+| EXTRACTION_TYPE_NOT_ENABLED | This status means the document was extracted using an extraction method that is not configured (e.g. OCR) , the document will not be used to detect income   |   
+| DATA_EXTRACTION_COMPLETED   | This means that the data was extracted and the document will be used to detect income                                                                        |
+| SUSPECTED_FRAUD             | This means that one of the document tampering checks failed and the whole case should be reviewed by the fraud team (Automated fraud checks must be enabled) |
+| CONFIRMED_FRAUD             | This can happen if the fraud team confirms fraud or if a high risk document tampering check has failed (Automated fraud checks must be enabled)              |
