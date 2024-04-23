@@ -39,3 +39,49 @@ Example payload:
 | pageSize      | Page size of the result set to return                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | `10` if omitted.<br>Validation error if set to more than `200` .                                           |
 | sortDirection | One of  `asc` or `desc`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | `desc`                                                                                                     |
 | sortFields    | Sortable fields - any of `incomeVerificationId, createdDate, correlationId, idNumber, emailAddress, surname`.<br>Sort priority is in the order the fields appear in the list.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | `createdDate, incomeVerificationId`                                                                        |
+
+Example response:
+
+```json
+{
+  "numberOfElements": 2,
+  "first": true,
+  "number": 0,
+  "size": 10,
+  "content": [
+    {
+      "incomeVerificationId": "28042230-f2f5-400f-8589-480b7d315694",
+      "correlationId": "28042230-f2f5-400f-8589-480b7d315694",
+      "createdDate": "2024-04-05T17:56:17.048",
+      "status": "SUCCESS",
+      "subStatus": "HIGH_INCOME_CONFIDENCE"
+    },
+    {
+      "incomeVerificationId": "28042230-f2f5-400f-8589-480b7d315694",
+      "correlationId": "28042230-f2f5-400f-8589-480b7d315694",
+      "createdDate": "2024-04-04T11:26:22.115",
+      "status": "FAILED",
+      "subStatus": "NO_INCOME_DETECTED"
+    }
+  ],
+  "sort": {
+    "sorted": true,
+    "unsorted": false,
+    "empty": false
+  },
+  "pageable": {
+    "offset": 0,
+    "pageNumber": 0,
+    "sort": {
+      "sorted": true,
+      "unsorted": false,
+      "empty": false
+    },
+    "paged": true,
+    "pageSize": 10,
+    "unpaged": false
+  },
+  "last": true,
+  "empty": false
+}
+```
