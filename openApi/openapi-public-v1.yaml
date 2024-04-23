@@ -416,6 +416,34 @@ paths:
       security:
         - bearerAuth:
             - 'incomeVerification:create'
+  /v1/incomeVerification/filter:
+    post:
+      tags:
+        - IncomeVerificationV1
+      summary: Generic income request filter
+      operationId: atlasFilter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FilterRequest'
+        required: true
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageSearchResult'
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:filter:read'
 components:
   schemas:
     ErrorDetail:
@@ -463,6 +491,9 @@ components:
           $ref: '#/components/schemas/PhysicalEntity'
         invMetadata:
           $ref: '#/components/schemas/InvMetadata'
+        loanAmount:
+          type: number
+          nullable: true
     Declaration:
       required:
         - nettIncome
@@ -1076,6 +1107,122 @@ components:
       properties:
         documentId:
           type: string
+    Pageable:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        pageNumber:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/Sort'
+        paged:
+          type: boolean
+        pageSize:
+          type: integer
+          format: int32
+        unpaged:
+          type: boolean
+    Sort:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
+    PageSearchResult:
+      type: object
+      properties:
+        numberOfElements:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        number:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+        sort:
+          $ref: '#/components/schemas/Sort'
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        last:
+          type: boolean
+        empty:
+          type: boolean
+    SearchResult:
+      type: object
+      properties:
+        incomeVerificationId:
+          type: string
+        correlationId:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+        idNumber:
+          type: string
+        passportNumber:
+          type: string
+        firstName:
+          type: string
+        surname:
+          type: string
+        emailAddress:
+          type: string
+        status:
+          $ref: '#/components/schemas/IncomeVerificationStatusV1'
+    FilterClause:
+      type: object
+      required:
+        - field
+        - values
+      properties:
+        field:
+          type: string
+        values:
+          type: array
+          items:
+            type: string
+        matchPhrase:
+          type: boolean
+    FilterRequest:
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterClause'
+        dateField:
+          type: string
+        page:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        sortDirection:
+          type: string
+        sortFields:
+          type: array
+          items:
+            type: string
+        fromDate:
+          type: string
+          format: date-time
+        toDate:
+          type: string
+          format: date-time
   securitySchemes:
     bearerAuth:
       type: oauth2
@@ -1094,6 +1241,7 @@ components:
             'incomeVerification:confirmation:update': Update the confirmation status of an Income Verification case
             'incomeVerification:file:upload': Upload a file to Income Verification cases
             'incomeVerification:bankStatement:upload': Upload extracted bank statement data to Income Verification cases
+            'incomeVerification:filter:read' : Filter Income Verification cases
     ApiKeyAuth:
       type: apiKey
       name: apiKey
