@@ -43,7 +43,8 @@ Body:
     "bankAccountNumber": "1581586785",
     "bankBranchCode": "",
     "bankName": ""
-  }
+  },
+  "loanAmount": "10000"
 }
 ```
 
@@ -178,4 +179,12 @@ The following strategies are available by default:
  - min - When using multiple months the system will find the consistent income steam over the selected months and use the smallest amount  
  - average -When using multiple months the system will find the consistent income steam over the selected months and use the average of the amounts found  
  - max - When using multiple months the system will find the consistent income steam over the selected months and use the largest amount  
- - irregular - The system will add up all the income transactions excluding specific income transactions, like loans received, and calculate the average of the monthly totals  
+ - irregular - The system will add up all the income transactions excluding specific income transactions, like loans received, and calculate the average of the monthly totals 
+
+## Other field descriptions
+
+### loanAmount
+
+This is an optional field for the provisional loan amount that the applicant is applying for. 
+
+> Defaults to null
