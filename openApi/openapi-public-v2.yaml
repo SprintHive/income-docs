@@ -181,6 +181,35 @@ paths:
       security:
         - bearerAuth:
             - 'incomeVerification:file:upload'
+  '/v2/incomeVerification/{incomeVerificationId}/extractedBankStatements':
+    post:
+      tags:
+        - IncomeVerificationV2
+      operationId: uploadExtractedBankStatements
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadExtractedBankStatementDataV2'
+        required: true
+      responses:
+        '200':
+          description: default response
+        '400':
+          description: Missing a required field or the bank statement start date is after the end date
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:bankStatement:upload'
   '/v2/incomeVerification/{incomeVerificationId}/suspectedFraud':
     post:
       tags:
@@ -426,6 +455,34 @@ paths:
       security:
         - bearerAuth:
             - 'incomeVerification:confirmation:update'
+  /v2/incomeVerification/filter:
+    post:
+      tags:
+        - IncomeVerificationV2
+      summary: Generic income request filter
+      operationId: atlasFilter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FilterRequest'
+        required: true
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageSearchResult'
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:filter:read'
 components:
   schemas:
     ErrorDetail:
@@ -499,6 +556,9 @@ components:
           $ref: '#/components/schemas/ApplicantDetails'
         invMetadata:
           $ref: '#/components/schemas/InvMetadata'
+        loanAmount:
+          type: number
+          nullable: true
     Declaration:
       required:
         - nettIncome
@@ -762,6 +822,15 @@ components:
         bankBranchCode:
           type: string
           nullable: true
+    UploadExtractedBankStatementDataV2:
+      required:
+        - extractedBankStatements
+      type: object
+      properties:
+        extractedBankStatements:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankStatement'
     IncomeVerificationStateV2:
       type: object
       properties:
@@ -872,6 +941,9 @@ components:
           type: string
           format: integer
           nullable: true
+        skipPayDayCalculation:
+          type: boolean
+          nullable: true
     Payment:
       type: object
       properties:
@@ -926,6 +998,9 @@ components:
           type: string
     Transaction:
       type: object
+      required:
+        - date
+        - transactionValue
       properties:
         id:
           type: string
@@ -1098,6 +1173,7 @@ components:
       type: string
       x-extensible-enum:
         - RECEIVED
+        - CLASSIFICATION_FAILED
         - DATA_EXTRACTION_FAILED
         - TOO_OLD
         - APPLICANT_MATCH_FAILED
@@ -1117,6 +1193,7 @@ components:
       x-extensible-enum:
         - BANK_STATEMENT
         - PAYSLIP
+        - MULTI_DOC
         - UNKNOWN
     IncomeConfirmationV2:
       type: object
@@ -1147,6 +1224,124 @@ components:
                 type: string
               documentHash:
                 type: string
+    FilterClause:
+      type: object
+      required:
+        - field
+        - values
+      properties:
+        field:
+          type: string
+        values:
+          type: array
+          items:
+            type: string
+        matchPhrase:
+          type: boolean
+    FilterRequest:
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterClause'
+        dateField:
+          type: string
+        page:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        sortDirection:
+          type: string
+        sortFields:
+          type: array
+          items:
+            type: string
+        fromDate:
+          type: string
+          format: date-time
+        toDate:
+          type: string
+          format: date-time
+    Pageable:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        pageNumber:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/Sort'
+        paged:
+          type: boolean
+        pageSize:
+          type: integer
+          format: int32
+        unpaged:
+          type: boolean
+    Sort:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
+    PageSearchResult:
+      type: object
+      properties:
+        numberOfElements:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        number:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResultV2'
+        sort:
+          $ref: '#/components/schemas/Sort'
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        last:
+          type: boolean
+        empty:
+          type: boolean
+    SearchResultV2:
+      type: object
+      properties:
+        incomeVerificationId:
+          type: string
+        correlationId:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+        idNumber:
+          type: string
+        passportNumber:
+          type: string
+        firstName:
+          type: string
+        surname:
+          type: string
+        emailAddress:
+          type: string
+        status:
+          $ref: '#/components/schemas/IncomeVerificationStatusV2'
+        subStatus:
+          $ref: '#/components/schemas/IncomeVerificationSubStatusV2'
   securitySchemes:
     bearerAuth:
       type: oauth2
@@ -1159,10 +1354,12 @@ components:
             'incomeVerification:read': Read Income Verification cases
             'incomeVerification:state:read': Read the most recent state for an income verification
             'incomeVerification:file:upload': Upload documents to a income verification
+            'incomeVerification:bankStatement:upload': Upload extracted bank statement data
             'incomeVerification:manualCapture:create': Capture the nett income for an Income Verification
             'incomeVerification:fraud:create': Suspect, and confirm fraud
             'incomeVerification:document:read': Read the state for a document
             'incomeVerification:confirmation:update': Record the confirmation result for an Income Verification case
+            'incomeVerification:filter:read' : Filter Income Verification cases
     ApiKeyAuth:
       type: apiKey
       name: apiKey

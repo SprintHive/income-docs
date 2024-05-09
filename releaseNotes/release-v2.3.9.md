@@ -1,6 +1,6 @@
 # Release Notes for v2.3.9
 
-Date: 1 March 2014
+Date: 1 March 2024
 
 ## Introducing a new document status CLASSIFICATION_FAILED
 
