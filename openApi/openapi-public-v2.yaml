@@ -483,6 +483,41 @@ paths:
       security:
         - bearerAuth:
             - 'incomeVerification:filter:read'
+  '/v2/incomeVerification/{incomeVerificationId}/enrichedTransactions':
+    get:
+      tags:
+        - IncomeVerificationV2
+      summary: Returns the consolidated list of transactions with enrichment that was used to determine income.
+      operationId: getIncomeVerificationEnrichedTransactions
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          description: Income verification id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpenseTagOptionsV2'
+        required: true
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BankStatement'
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:state:read'
 components:
   schemas:
     ErrorDetail:
@@ -1342,6 +1377,19 @@ components:
           $ref: '#/components/schemas/IncomeVerificationStatusV2'
         subStatus:
           $ref: '#/components/schemas/IncomeVerificationSubStatusV2'
+    ExpenseTagOptionsV2:
+      type: object
+      properties:
+        transactionTags:
+          type: boolean
+        transactionCategory:
+          type: boolean
+        transactionThirdParty:
+          type: boolean
+        transactionType:
+          type: boolean
+        transactionFailureIndicator:
+          type: boolean
   securitySchemes:
     bearerAuth:
       type: oauth2
