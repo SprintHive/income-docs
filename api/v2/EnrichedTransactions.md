@@ -9,7 +9,6 @@ Example payload:
 
 ```json
 {
-  "transactionTags" : true,
   "transactionCategory" : true,
   "transactionThirdParty" : true,
   "transactionType" : true,

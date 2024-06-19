@@ -515,6 +515,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExceptionMessage'
+        '402':
+          description: feature not enabled response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
       security:
         - bearerAuth:
             - 'incomeVerification:state:read'
@@ -1380,8 +1386,6 @@ components:
     ExpenseTagOptionsV2:
       type: object
       properties:
-        transactionTags:
-          type: boolean
         transactionCategory:
           type: boolean
         transactionThirdParty:
