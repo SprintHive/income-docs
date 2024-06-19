@@ -902,6 +902,8 @@ components:
           type: string
         analysisResult:
           $ref: '#/components/schemas/AnalysisResultV2'
+        profileResult:
+          $ref: "#/components/schemas/ProfileResultV2"
     AnalysisResultV2:
       type: object
       properties:
@@ -911,6 +913,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AnalysisResultItemV2'
+    ProfileResultV2:
+      type: object
+      properties:
+        score:
+          type: number
+        riskCategory:
+          $ref: "#/components/schemas/RiskCategory"
     AnalysisResultItemV2:
       type: object
       properties:
@@ -986,6 +995,9 @@ components:
           type: boolean
           nullable: true
     Payment:
+      required:
+        - date
+        - amount
       type: object
       properties:
         date:
@@ -1191,6 +1203,8 @@ components:
           type: string
           x-extensible-enum:
             - STEEP_SPENDING_CURVE
+        score:
+          type: number
         riskCategory:
           $ref: "#/components/schemas/RiskCategory"
     RiskCategory:
