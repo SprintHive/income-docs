@@ -484,7 +484,7 @@ paths:
         - bearerAuth:
             - 'incomeVerification:filter:read'
   '/v2/incomeVerification/{incomeVerificationId}/enrichedTransactions':
-    get:
+    post:
       tags:
         - IncomeVerificationV2
       summary: Returns the consolidated list of transactions with enrichment that was used to determine income.

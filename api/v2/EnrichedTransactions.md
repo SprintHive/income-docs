@@ -2,7 +2,7 @@
 
 Endpoint: `/v2/incomeVerification/{incomeVerificationId}/enrichedTransactions`\
 Content Type: `application/json`\
-Request Method: `GET`
+Request Method: `POST`
 Request body: The selections of enrichments to return with the transactions 
 
 Example payload:
