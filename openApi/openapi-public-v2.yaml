@@ -1181,6 +1181,7 @@ components:
           type: string
           x-extensible-enum:
             - SUSPICIOUS_CREATOR_TOOL
+            - SUSPICIOUS_CREATOR
             - DOCUMENT_TAMPER_LIKELY
             - ACCOUNT_NUMBER_CHANGED
             - IRREGULAR_ATM_WITHDRAWAL_FEES
