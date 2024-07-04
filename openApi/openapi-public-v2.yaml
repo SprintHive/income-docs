@@ -640,7 +640,7 @@ components:
         incomeDetectorStrategy:
           type: string
           nullable: true
-        documentWhiteList:
+        documentTypeWhiteList:
           type: array
           items:
             type: string
