@@ -1242,6 +1242,8 @@ components:
         - DATA_EXTRACTION_COMPLETED
         - SUSPECTED_FRAUD
         - CONFIRMED_FRAUD
+        - DUPLICATE
+        - DOCUMENT_TYPE_NOT_ENABLED
     DocumentSource:
       type: string
       x-extensible-enum:
