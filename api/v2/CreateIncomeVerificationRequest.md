@@ -120,6 +120,22 @@ Response:
 }
 ```
 
+### One months Payslip and only payslips allowed for income calculation
+```json
+{
+  "config": {
+    "minTransactionDaysRequired": 5,
+    "documentWhiteList" : ["payslip"],
+    "minPayslipsRequired": 1,
+    "bankStatementAndPayslipRequired": true,
+    "maxAgeDays": {
+      "bank-statement": 31,
+      "payslip": 90
+    }
+  }
+}
+```
+
 ## Configuration Options
 
 The behaviour of the service can be configured by inputs provided when creating the request.
