@@ -640,6 +640,11 @@ components:
         incomeDetectorStrategy:
           type: string
           nullable: true
+        documentTypeWhiteList:
+          type: array
+          items:
+            type: string
+          nullable: true
     MaxAgeDaysConfig:
       type: object
       properties:
@@ -1181,6 +1186,7 @@ components:
           type: string
           x-extensible-enum:
             - SUSPICIOUS_CREATOR_TOOL
+            - SUSPICIOUS_CREATOR
             - DOCUMENT_TAMPER_LIKELY
             - ACCOUNT_NUMBER_CHANGED
             - IRREGULAR_ATM_WITHDRAWAL_FEES
@@ -1236,6 +1242,8 @@ components:
         - DATA_EXTRACTION_COMPLETED
         - SUSPECTED_FRAUD
         - CONFIRMED_FRAUD
+        - DUPLICATE
+        - DOCUMENT_TYPE_NOT_ENABLED
     DocumentSource:
       type: string
       x-extensible-enum:
