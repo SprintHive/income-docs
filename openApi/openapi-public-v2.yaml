@@ -1156,11 +1156,11 @@ components:
           type: number
         leaveBalance:
           type: string
-        earningItem:
+        earningItems:
           type: array
           items:
             $ref: '#/components/schemas/EarningItem'
-        deductionItem:
+        deductionItems:
           type: array
           items:
             $ref: '#/components/schemas/DeductionItem'
@@ -1453,7 +1453,8 @@ components:
             - REIMBURSEMENT
             - RETIREMENT_BENEFIT
             - SALARY
-            - SHORT-TIME
+            - SHORT_TIME
+            - UNDETERMINED
         amount:
           type: number
         recurring:
@@ -1468,7 +1469,7 @@ components:
           x-extensible-enum:
             - FUNERAL_COVER
             - MEDICAL
-            - PROVIDENT/PENSION
+            - PROVIDENT_PENSION
             - UNION_FEES
             - HOME_LOAN
             - LOANS
@@ -1478,20 +1479,20 @@ components:
             - LIFE_INSURANCE
             - HOUSING_COSTS
             - ADVANCE
-            - CANTEEN/FOOD
+            - CANTEEN_FOOD
             - EDUCATION
-            - CLOTHING/UNIFORMS
+            - CLOTHING_UNIFORMS
             - CHARITY
-            - TRANSPORT/FUEL/PARKING
+            - TRANSPORT_FUEL_PARKING
             - SAVING
-            - CELLPHONE/INTERNET/PHONE
+            - CELLPHONE_INTERNET_PHONE
             - COMMISSION
-            - RETIREMENT/INVESTMENT
+            - RETIREMENT_INVESTMENT
             - ACCOUNT_DEDUCTIONS
             - UNPAID_LEAVE
             - COMPANY_FACILITIES
-            - GARNISHEE/MAINTENANCE
-            - BACKPAY/OVERPAID
+            - GARNISHEE_MAINTENANCE
+            - BACKPAY_OVERPAID
             - DAMAGES
             - SHARES
             - STOCK
