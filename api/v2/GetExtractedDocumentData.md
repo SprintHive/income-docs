@@ -20,17 +20,50 @@ An example of the response when the document is a payslip:
     "payslip": {
         "dateEngaged": "2016-01-01",
         "employer": "ACME Pty (Ltd)",
+        "employeeAddress": "1 Blank Street Nowhere 0000",
         "fullName": "Joe Soap",
         "grossIncome": 22000,
         "nettIncome": 18226.92,
         "idNumber": "9999999999",
         "bankAccountNumber": "99999999",
+        "branchCode": "99999",
+        "bank": "ACME bank",    
         "taxNumber": "9999999999",
         "timestamp": "2021-12-31",
         "totalDeductions": 3773.08,
         "totalEarnings": 22000,
         "uif": 148.72,
-        "companyUifContribution": 148.72
+        "companyUifContribution": 148.72,
+        "jobTitle": "Clerk",
+        "earningItems": [
+          {
+            "description": "Cash Salary",
+            "type": "SALARY",
+            "amount": 14294.16
+          }
+        ],
+        "deductionItems": [
+          {
+            "description": "Total Tax",
+            "type": "UNDETERMINED",
+            "amount": 1424.62
+          },
+          {
+            "description": "Gap Cover",
+            "type": "UNDETERMINED",
+            "amount": 144.00
+          },
+          {
+            "description": "Payroll Giving",
+            "type": "UNDETERMINED",
+            "amount": 30.00
+          },
+          {
+            "description": "UIF Deduction",
+            "type": "UIF",
+            "amount": 148.72
+          }
+      ]
     }
 }
 ```

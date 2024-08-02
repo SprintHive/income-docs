@@ -1111,6 +1111,8 @@ components:
           type: string
         employer:
           type: string
+        employerAddress:
+          type: string
         title:
           type: string
         initials:
@@ -1131,6 +1133,10 @@ components:
           type: string
         bankAccountNumber:
           type: string
+        bank:
+          type: string
+        branchCode:
+          type: string
         employeeAddress:
           type: string
         passportNumber:
@@ -1150,6 +1156,14 @@ components:
           type: number
         leaveBalance:
           type: string
+        earningItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/EarningItem'
+        deductionItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeductionItem'
     FraudHistoryItem:
       type: object
       properties:
@@ -1416,6 +1430,77 @@ components:
           type: boolean
         transactionFailureIndicator:
           type: boolean
+    EarningItem:
+      type: object
+      properties:
+        description:
+          type: string
+        type:
+          type: string
+          x-extensible-enum:
+            - ABSENTEEISM
+            - ALLOWANCE
+            - BONUS
+            - COMMISSION
+            - HOUSING
+            - INCENTIVES
+            - INSURANCE
+            - LEAVE
+            - MEDICAL_BENEFIT
+            - OTHER_EARNINGS
+            - OVERTIME
+            - RECURRING_ALLOWANCE
+            - REIMBURSEMENT
+            - RETIREMENT_BENEFIT
+            - SALARY
+            - SHORT_TIME
+            - UNDETERMINED
+        amount:
+          type: number
+        recurring:
+          type: boolean
+    DeductionItem:
+      type: object
+      properties:
+        description:
+          type: string
+        type:
+          type: string
+          x-extensible-enum:
+            - FUNERAL_COVER
+            - MEDICAL
+            - PROVIDENT_PENSION
+            - UNION_FEES
+            - HOME_LOAN
+            - LOANS
+            - INSURANCE
+            - SOCIAL
+            - BARGINING_COUNCIL
+            - LIFE_INSURANCE
+            - HOUSING_COSTS
+            - ADVANCE
+            - CANTEEN_FOOD
+            - EDUCATION
+            - CLOTHING_UNIFORMS
+            - CHARITY
+            - TRANSPORT_FUEL_PARKING
+            - SAVING
+            - CELLPHONE_INTERNET_PHONE
+            - COMMISSION
+            - RETIREMENT_INVESTMENT
+            - ACCOUNT_DEDUCTIONS
+            - UNPAID_LEAVE
+            - COMPANY_FACILITIES
+            - GARNISHEE_MAINTENANCE
+            - BACKPAY_OVERPAID
+            - DAMAGES
+            - SHARES
+            - STOCK
+            - PAYE
+            - UIF
+            - UNDETERMINED
+        amount:
+          type: number
   securitySchemes:
     bearerAuth:
       type: oauth2
