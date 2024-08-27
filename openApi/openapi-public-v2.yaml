@@ -1438,7 +1438,6 @@ components:
         type:
           type: string
           x-extensible-enum:
-            - ABSENTEEISM
             - ALLOWANCE
             - BONUS
             - COMMISSION
@@ -1449,11 +1448,9 @@ components:
             - MEDICAL_BENEFIT
             - OTHER_EARNINGS
             - OVERTIME
-            - RECURRING_ALLOWANCE
             - REIMBURSEMENT
             - RETIREMENT_BENEFIT
             - SALARY
-            - SHORT_TIME
             - UNDETERMINED
         amount:
           type: number
@@ -1467,36 +1464,7 @@ components:
         type:
           type: string
           x-extensible-enum:
-            - FUNERAL_COVER
-            - MEDICAL
-            - PROVIDENT_PENSION
-            - UNION_FEES
-            - HOME_LOAN
-            - LOANS
-            - INSURANCE
-            - SOCIAL
-            - BARGINING_COUNCIL
-            - LIFE_INSURANCE
-            - HOUSING_COSTS
-            - ADVANCE
-            - CANTEEN_FOOD
-            - EDUCATION
-            - CLOTHING_UNIFORMS
-            - CHARITY
-            - TRANSPORT_FUEL_PARKING
-            - SAVING
-            - CELLPHONE_INTERNET_PHONE
-            - COMMISSION
-            - RETIREMENT_INVESTMENT
-            - ACCOUNT_DEDUCTIONS
-            - UNPAID_LEAVE
-            - COMPANY_FACILITIES
-            - GARNISHEE_MAINTENANCE
-            - BACKPAY_OVERPAID
-            - DAMAGES
-            - SHARES
-            - STOCK
-            - PAYE
+            - INCOME_TAX
             - UIF
             - UNDETERMINED
         amount:
