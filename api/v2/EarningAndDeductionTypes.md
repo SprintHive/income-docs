@@ -1,0 +1,21 @@
+# Earning Types:
+- "salary"
+- "allowances"
+- "overtime"
+- "other-income"
+- "housing"
+- "bonus"
+- "medical"
+- "commission"
+- "reimbursement"
+- "leave"
+- "retirement"
+- "incentives"
+- "insurance"
+- "reimbursement"
+- "unknown"
+
+# Deduction Types
+- "income-tax"
+- "uif"
+- "other-deductions"

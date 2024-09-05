@@ -38,29 +38,29 @@ An example of the response when the document is a payslip:
         "earningItems": [
           {
             "description": "Cash Salary",
-            "type": "SALARY",
+            "type": "salary",
             "amount": 14294.16
           }
         ],
         "deductionItems": [
           {
             "description": "Total Tax",
-            "type": "UNDETERMINED",
+            "type": "unknown",
             "amount": 1424.62
           },
           {
             "description": "Gap Cover",
-            "type": "UNDETERMINED",
+            "type": "unknown",
             "amount": 144.00
           },
           {
             "description": "Payroll Giving",
-            "type": "UNDETERMINED",
+            "type": "unknown",
             "amount": 30.00
           },
           {
             "description": "UIF Deduction",
-            "type": "UIF",
+            "type": "uif",
             "amount": 148.72
           }
       ]
