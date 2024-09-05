@@ -120,6 +120,22 @@ Response:
 }
 ```
 
+### One months Payslip and only payslips allowed for income calculation
+```json
+{
+  "config": {
+    "minTransactionDaysRequired": 5,
+    "documentWhiteList" : ["payslip"],
+    "minPayslipsRequired": 1,
+    "bankStatementAndPayslipRequired": true,
+    "maxAgeDays": {
+      "bank-statement": 31,
+      "payslip": 90
+    }
+  }
+}
+```
+
 ## Configuration Options
 
 The behaviour of the service can be configured by inputs provided when creating the request.
@@ -180,6 +196,17 @@ The following strategies are available by default:
  - average -When using multiple months the system will find the consistent income steam over the selected months and use the average of the amounts found  
  - max - When using multiple months the system will find the consistent income steam over the selected months and use the largest amount  
  - irregular - The system will add up all the income transactions excluding specific income transactions, like loans received, and calculate the average of the monthly totals 
+
+### documentWhiteList
+
+The allowed documents for verifying this income request, when null all document types are allowed. This overrides any config set at the service level. 
+
+> Defaults to null
+
+The following documents are currently available
+
+- payslip
+- bank-statement
 
 ## Other field descriptions
 

@@ -483,6 +483,47 @@ paths:
       security:
         - bearerAuth:
             - 'incomeVerification:filter:read'
+  '/v2/incomeVerification/{incomeVerificationId}/enrichedTransactions':
+    post:
+      tags:
+        - IncomeVerificationV2
+      summary: Returns the consolidated list of transactions with enrichment that was used to determine income.
+      operationId: getIncomeVerificationEnrichedTransactions
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          description: Income verification id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpenseTagOptionsV2'
+        required: true
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BankStatement'
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+        '402':
+          description: feature not enabled response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:state:read'
 components:
   schemas:
     ErrorDetail:
@@ -598,6 +639,11 @@ components:
           $ref: '#/components/schemas/MaxAgeDaysConfig'
         incomeDetectorStrategy:
           type: string
+          nullable: true
+        documentTypeWhiteList:
+          type: array
+          items:
+            type: string
           nullable: true
     MaxAgeDaysConfig:
       type: object
@@ -861,6 +907,8 @@ components:
           type: string
         analysisResult:
           $ref: '#/components/schemas/AnalysisResultV2'
+        profileResult:
+          $ref: "#/components/schemas/ProfileResultV2"
     AnalysisResultV2:
       type: object
       properties:
@@ -870,6 +918,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AnalysisResultItemV2'
+    ProfileResultV2:
+      type: object
+      properties:
+        score:
+          type: number
+        riskCategory:
+          $ref: "#/components/schemas/RiskCategory"
     AnalysisResultItemV2:
       type: object
       properties:
@@ -945,6 +1000,9 @@ components:
           type: boolean
           nullable: true
     Payment:
+      required:
+        - date
+        - amount
       type: object
       properties:
         date:
@@ -1053,6 +1111,8 @@ components:
           type: string
         employer:
           type: string
+        employerAddress:
+          type: string
         title:
           type: string
         initials:
@@ -1073,6 +1133,10 @@ components:
           type: string
         bankAccountNumber:
           type: string
+        bank:
+          type: string
+        branchCode:
+          type: string
         employeeAddress:
           type: string
         passportNumber:
@@ -1092,6 +1156,14 @@ components:
           type: number
         leaveBalance:
           type: string
+        earningItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/EarningItem'
+        deductionItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeductionItem'
     FraudHistoryItem:
       type: object
       properties:
@@ -1128,6 +1200,7 @@ components:
           type: string
           x-extensible-enum:
             - SUSPICIOUS_CREATOR_TOOL
+            - SUSPICIOUS_CREATOR
             - DOCUMENT_TAMPER_LIKELY
             - ACCOUNT_NUMBER_CHANGED
             - IRREGULAR_ATM_WITHDRAWAL_FEES
@@ -1150,6 +1223,8 @@ components:
           type: string
           x-extensible-enum:
             - STEEP_SPENDING_CURVE
+        score:
+          type: number
         riskCategory:
           $ref: "#/components/schemas/RiskCategory"
     RiskCategory:
@@ -1181,6 +1256,8 @@ components:
         - DATA_EXTRACTION_COMPLETED
         - SUSPECTED_FRAUD
         - CONFIRMED_FRAUD
+        - DUPLICATE
+        - DOCUMENT_TYPE_NOT_ENABLED
     DocumentSource:
       type: string
       x-extensible-enum:
@@ -1342,6 +1419,56 @@ components:
           $ref: '#/components/schemas/IncomeVerificationStatusV2'
         subStatus:
           $ref: '#/components/schemas/IncomeVerificationSubStatusV2'
+    ExpenseTagOptionsV2:
+      type: object
+      properties:
+        transactionCategory:
+          type: boolean
+        transactionThirdParty:
+          type: boolean
+        transactionType:
+          type: boolean
+        transactionFailureIndicator:
+          type: boolean
+    EarningItem:
+      type: object
+      properties:
+        description:
+          type: string
+        type:
+          type: string
+          x-extensible-enum:
+            - ALLOWANCE
+            - BONUS
+            - COMMISSION
+            - HOUSING
+            - INCENTIVES
+            - INSURANCE
+            - LEAVE
+            - MEDICAL_BENEFIT
+            - OTHER_EARNINGS
+            - OVERTIME
+            - REIMBURSEMENT
+            - RETIREMENT_BENEFIT
+            - SALARY
+            - UNDETERMINED
+        amount:
+          type: number
+        recurring:
+          type: boolean
+    DeductionItem:
+      type: object
+      properties:
+        description:
+          type: string
+        type:
+          type: string
+          x-extensible-enum:
+            - INCOME_TAX
+            - UIF
+            - UNDETERMINED
+        amount:
+          type: number
   securitySchemes:
     bearerAuth:
       type: oauth2
