@@ -45,17 +45,17 @@ An example of the response when the document is a payslip:
         "deductionItems": [
           {
             "description": "Total Tax",
-            "type": "unknown",
+            "type": "other-deductions",
             "amount": 1424.62
           },
           {
             "description": "Gap Cover",
-            "type": "unknown",
+            "type": "other-deductions",
             "amount": 144.00
           },
           {
             "description": "Payroll Giving",
-            "type": "unknown",
+            "type": "other-deductions",
             "amount": 30.00
           },
           {
