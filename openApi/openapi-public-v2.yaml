@@ -1437,21 +1437,6 @@ components:
           type: string
         type:
           type: string
-          x-extensible-enum:
-            - ALLOWANCE
-            - BONUS
-            - COMMISSION
-            - HOUSING
-            - INCENTIVES
-            - INSURANCE
-            - LEAVE
-            - MEDICAL_BENEFIT
-            - OTHER_EARNINGS
-            - OVERTIME
-            - REIMBURSEMENT
-            - RETIREMENT_BENEFIT
-            - SALARY
-            - UNDETERMINED
         amount:
           type: number
         recurring:
@@ -1463,10 +1448,6 @@ components:
           type: string
         type:
           type: string
-          x-extensible-enum:
-            - INCOME_TAX
-            - UIF
-            - UNDETERMINED
         amount:
           type: number
   securitySchemes:
