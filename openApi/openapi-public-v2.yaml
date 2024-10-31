@@ -789,6 +789,8 @@ components:
           format: date-time
         status:
           $ref: '#/components/schemas/DocumentStatus'
+        usedToDetectIncome:
+          type: boolean
     FraudAnalysisDtoV2:
       type: object
       properties:
@@ -944,6 +946,10 @@ components:
           type: integer
         payCycle:
           type: integer
+        docIds:
+          items:
+            type: string
+          nullable: true
     IncomeVerificationStatusV2:
       type: string
       x-extensible-enum:
@@ -1258,6 +1264,7 @@ components:
         - CONFIRMED_FRAUD
         - DUPLICATE
         - DOCUMENT_TYPE_NOT_ENABLED
+        - MAGNET_LIMIT_REACHED
     DocumentSource:
       type: string
       x-extensible-enum:
