@@ -791,6 +791,8 @@ components:
           $ref: '#/components/schemas/DocumentStatus'
         usedToDetectIncome:
           type: boolean
+        parentId:
+          type: string
     FraudAnalysisDtoV2:
       type: object
       properties:
