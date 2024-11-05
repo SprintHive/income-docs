@@ -10,7 +10,7 @@ A project to describe how to integrate with SprintHive's income verification API
 [Notifications](guides/notifications/Notifications.md)
 
 ## API
-[Open API spec](openApi/openapi-public-v2.yaml)  
+[OpenAPI spec](openApi/openapi-public-v2.yaml)  
 [Create Income Verification Request](api/v2/CreateIncomeVerificationRequest.md)  
 [Get Income Verification State](api/v2/GetIncomeVerificationState.md)  
 [Download Document](api/v2/GetDocumentContent.md)  
