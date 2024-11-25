@@ -793,6 +793,12 @@ components:
           type: boolean
         parentId:
           type: string
+        sizeBytes:
+          type: string
+        textExtractionType:
+          $ref: '#/components/schemas/TextExtractionType'
+        contentType:
+          type: string
     FraudAnalysisDtoV2:
       type: object
       properties:
@@ -1053,6 +1059,10 @@ components:
         statementDate:
           type: string
           format: date
+        docIds:
+          items:
+            type: string
+          nullable: true
     BankAccount:
       type: object
       properties:
@@ -1281,6 +1291,12 @@ components:
         - PAYSLIP
         - MULTI_DOC
         - UNKNOWN
+    TextExtractionType:
+      type: string
+      x-extensible-enum:
+        - NONE
+        - OCR
+        - MACHINE_READABLE
     IncomeConfirmationV2:
       type: object
       required:
