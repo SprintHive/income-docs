@@ -1472,6 +1472,8 @@ components:
     EarningItem:
       type: object
       properties:
+        code:
+          type: string
         description:
           type: string
         type:
