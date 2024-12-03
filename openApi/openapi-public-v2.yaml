@@ -1117,6 +1117,8 @@ components:
     Payslip:
       type: object
       properties:
+        persal:
+          type: boolean
         dateEngaged:
           type: string
           format: date
