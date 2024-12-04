@@ -46,13 +46,11 @@ The benefit of this option is that you don't have to provision queues within you
 you don't have control over queue settings and can't easily change permissions, DLQ settings, etc.
 ![sqs-diagram-queues-hosted-by-sprinthive](images/sqs-diagram-queues-hosted-by-sprinthive.png)
 
-## Option 2: SQS quese are hosted in Your AWS account
+## Option 2: SQS queues are hosted in Your AWS account
 You create SQS queues within your AWS account and SprintHive authorizes them to subscribe to the AWS topic in our AWS account.
 The notifications flow from SprintHives topic into your queue and there is no need for us to have SQS queues within our AWS account.
 The benefits of this option is that you have complete control over the queue configuration and access to those queues.
 ![sqs-diagram-queues-hosted-by-partner](images/sqs-diagram-queues-hosted-by-partner.png)
-
-![sqs-diagram](images/sqs-diagram.png)
 
 # Creating the Web hook 
 
