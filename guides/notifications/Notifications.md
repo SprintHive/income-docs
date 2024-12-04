@@ -38,7 +38,7 @@ The most common scenario is for the status to change from IN_PROGRESS to SUCCESS
 
 
 # SQS queues
-## Option 1: SQS quese are hosted in SprintHives AWS account
+## Option 1: SQS queues are hosted in SprintHives AWS account
 The notifications flow into SQS queues within SprintHives AWS account.
 In order for you to get these messages, SprintHive will authorize a principal from your AWS account to read and 
 delete messages from these queues.
