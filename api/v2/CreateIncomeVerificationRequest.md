@@ -14,8 +14,6 @@ Body:
     "minTransactionDaysRequired": 15,
     "minPayslipsDaysRequired": 1,
     "timeOutMinutes": 1440,
-    "limitTransactionsByCutOffDate": false,
-    "determineIncomeOnTimeOut": false,
     "bankStatementAndPayslipRequired": false,
     "incomeDetectorStrategy": "average",
     "maxAgeDays": {

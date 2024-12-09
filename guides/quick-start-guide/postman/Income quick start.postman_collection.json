@@ -65,7 +65,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"correlationId\": \"jon-test-4\",\n    \"primaryIncome\": {\n        \"grossIncome\": \"5000\",\n        \"nettIncome\": \"4300\"\n    },\n    \"config\": {\n        \"minTransactionDaysRequired\": 5,\n        \"limitTransactionsByCutOffDate\": true,\n        \"maxAgeDays\": {\n            \"bank-statement\": 1000,\n            \"payslip\": 1000\n        }\n    }\n}",
+					"raw": "{\n    \"correlationId\": \"jon-test-4\",\n    \"primaryIncome\": {\n        \"grossIncome\": \"5000\",\n        \"nettIncome\": \"4300\"\n    },\n    \"config\": {\n        \"minTransactionDaysRequired\": 5,\n        \"maxAgeDays\": {\n            \"bank-statement\": 1000,\n            \"payslip\": 1000\n        }\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
