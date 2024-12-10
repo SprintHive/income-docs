@@ -155,6 +155,8 @@ weekends/holidays into account)
 If the verification requires both a bank statement and a payslip (true) or just one of the two (false) in order to 
 completely process a case
 
+[click here for more details](IncomeFromBankStatementAndPayslip.md)
+
 ### maxAgeDays.bank-statement
 
 Maximum allowed age of a bank statement in days, if older will be ignored

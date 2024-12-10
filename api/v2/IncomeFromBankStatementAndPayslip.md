@@ -5,7 +5,7 @@
 
 # When bankStatementAndPayslipRequired is true
 
-When bankStatementAndPayslipRequired is true when creating an income verification (Endpoint: `income/v2/incomeVerification`), we
+When bankStatementAndPayslipRequired is true when [creating an income verification](CreateIncomeVerificationRequest.md), we
 will get a bank statement income result and a payslip income result once valid documents of each type have been added 
 to the case. These income results will be compared to the declared nett income from the customer. Both the result from 
 the bank statements and payslips must be high confidence for the case to be status: `SUCCESSFUL`, 
@@ -20,7 +20,7 @@ added to the case, but with this config, we can also have income detected from t
 income instead of the declaration.
 
 ## Nullable declared income
-The **declared nett income** when creating an income verification is also now **optional**, since the bank statement 
+The **declared nett income** when [creating an income verification](CreateIncomeVerificationRequest.md) is also now **optional**, since the bank statement 
 income can be compared to the payslip instead of the declaration. Whereas otherwise, primaryIncome.nettIncome would be 
 a required field.
 
@@ -78,7 +78,7 @@ statement and payslip results are considered as usual (described above).
 
 ## Relative income source
 To see what the results used were relative to, see `bankStatementRelativeIncomeSource` and `payslipRelativeIncomeSource`
-in the state result. 
+in the [state result](GetIncomeVerificationState.md). 
 They can be:
 - `DECLARED` Compared to the declared nett income.
 - `PAYSLIP` When the bank statement income was calculated relative to the payslip.
