@@ -478,7 +478,6 @@ components:
     CreateIncomeVerificationV1:
       required:
         - correlationId
-        - declaration
       type: object
       properties:
         config:
@@ -495,8 +494,6 @@ components:
           type: number
           nullable: true
     Declaration:
-      required:
-        - nettIncome
       type: object
       properties:
         grossIncome:
