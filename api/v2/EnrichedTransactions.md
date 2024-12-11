@@ -3,8 +3,8 @@
 There are two options described below for retrieving transactions.
 
 ## Transactions
-This endpoint will return the consolidated list of transactions that were used to determine income. Any transaction 
-enrichments that were enabled when the income verification case was created, will also be returned in this response.
+This endpoint will return the consolidated list of transactions that were used to determine income. All transaction 
+enrichments that are enabled in your environment will also be returned in this response.
 
 Endpoint: ```/v2/incomeVerification/{incomeVerificationId}/transactions```  
 Method: GET
@@ -34,8 +34,7 @@ Example response:
 
 ## Enriched Transactions
 This endpoint will return the consolidated list of transactions that were used to determine income. Additional 
-transaction enrichments to be fetched, that may not have been enabled when the income verification case was created, 
-can also be included in the request body.
+transaction enrichments that are not enabled in general in your environment, can also be requested in the request body.
 
 Use of this endpoint may have billing implications. Contact SprintHive if you would like to enable it. 
 
