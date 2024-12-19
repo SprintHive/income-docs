@@ -136,7 +136,7 @@ Response:
 ```json
 {
   "config": {
-    "minTransactionDaysRequired": 5,
+    "minTransactionDaysRequired": 160,
     "documentWhiteList" : ["bank-statement"],
     "bankStatementAndPayslipRequired": false,
     "maxAgeDays": {
