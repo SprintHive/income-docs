@@ -71,7 +71,7 @@ Response:
 }
 ```
 
-### Most recent three months Bank statement or Payslip
+### Most recent three months Bank statement or three months Payslips 
 ```json
 {
   "config": {
@@ -103,7 +103,7 @@ Response:
 }
 ```
 
-### One months Payslip and three months bank statements
+### Most recent one months Payslip and three months bank statements
 ```json
 {
   "config": {
@@ -112,23 +112,35 @@ Response:
     "bankStatementAndPayslipRequired": true,
     "maxAgeDays": {
       "bank-statement": 32,
+      "payslip": 32
+    }
+  }
+}
+```
+
+### One months Payslip in the last three months, and only payslips allowed for income calculation
+```json
+{
+  "config": {
+    "documentWhiteList" : ["payslip"],
+    "minPayslipsRequired": 1,
+    "bankStatementAndPayslipRequired": false,
+    "maxAgeDays": {
       "payslip": 90
     }
   }
 }
 ```
 
-### One months Payslip and only payslips allowed for income calculation
+### Six months bank statements, and only bank statements allowed for income calculation
 ```json
 {
   "config": {
     "minTransactionDaysRequired": 5,
-    "documentWhiteList" : ["payslip"],
-    "minPayslipsRequired": 1,
-    "bankStatementAndPayslipRequired": true,
+    "documentWhiteList" : ["bank-statement"],
+    "bankStatementAndPayslipRequired": false,
     "maxAgeDays": {
-      "bank-statement": 31,
-      "payslip": 90
+      "bank-statement": 32
     }
   }
 }
@@ -177,6 +189,7 @@ The applicant's gross income as per their payslip
 ### declaration.nettIncome
 
 The applicant's net take home pay as per their payslip or bank statement
+This is generally a required field. See [here](IncomeFromBankStatementAndPayslip.md) for when it can become optional.
 
 ### declaration.payCycleInDays
 
