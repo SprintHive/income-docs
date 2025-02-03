@@ -15,6 +15,8 @@ A project to describe how to integrate with SprintHive's income verification API
 [Get Income Verification State](api/v2/GetIncomeVerificationState.md)  
 [Download Document](api/v2/GetDocumentContent.md)  
 [Sending income confirmation](api/v2/IncomeConfirmation.md)  
+[Upload Document](api/v2/UploadDocument.md)
+[Get consolidated list of transaction used](api/v2/GetTransactionsUsed.md)
 
 ## Release Notes
 
