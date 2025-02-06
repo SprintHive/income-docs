@@ -524,6 +524,29 @@ paths:
       security:
         - bearerAuth:
             - 'incomeVerification:state:read'
+  '/v2/incomeVerification/{incomeVerificationId}/history':
+    get:
+      tags:
+        - IncomeVerificationV2
+      summary: Read the history of events on an income verification request
+      operationId: getHistory
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          description: Income verification id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Operation succeeded
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/HistoryTimeline'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:history:read'
 components:
   schemas:
     ErrorDetail:
@@ -1120,8 +1143,6 @@ components:
     Payslip:
       type: object
       properties:
-        persal:
-          type: boolean
         dateEngaged:
           type: string
           format: date
@@ -1187,6 +1208,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DeductionItem'
+        persal:
+          type: boolean
     FraudHistoryItem:
       type: object
       properties:
@@ -1306,6 +1329,15 @@ components:
         - BANK_STATEMENT
         - PAYSLIP
         - MULTI_DOC
+        - PROOF_OF_ACCOUNT
+        - ID_BOOK
+        - ID_CARD_FRONT
+        - ID_CARD_REVERSE
+        - ID_CARD_FRONT_AND_REVERSE
+        - DRIVING_LICENCE_FRONT
+        - DRIVING_LICENCE_REVERSE
+        - DRIVING_LICENCE_FRONT_AND_REVERSE
+        - COB
         - UNKNOWN
     TextExtractionType:
       type: string
@@ -1493,6 +1525,138 @@ components:
           type: string
         amount:
           type: number
+    HistoryTimeline:
+      type: object
+      properties:
+        incomeVerificationId:
+          type: string
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoryTimelineItem'
+    HistoryTimelineItem:
+      type: object
+      required:
+        - id
+        - created
+        - title
+        - eventKey
+        - eventVersion
+      properties:
+        id:
+          description: Unique identifier for this event
+          type: string
+        created:
+          description: The time at which the event took place
+          type: string
+          format: date-time
+        title:
+          description: A title describing the type of event
+          type: string
+        description:
+          description: A description of the event of the event
+          type: string
+        eventKey:
+          description: A consistent key indicating what type of event has taken place
+          type: string
+        eventVersion:
+          description: The version of the event
+          type: string
+        userDisplayName:
+          type: string
+        userProfilePicture:
+          type: string
+        traceId:
+          type: string
+      discriminator:
+        propertyName: eventKey
+        mapping:
+          'incomeVerification:created': '#/components/schemas/CreatedHistoryTimelineItem'
+          'incomeVerification:bankStatementCombinedDataValidationSucceeded': '#/components/schemas/BankStatementValidationHistoryTimelineItem'
+          'incomeVerification:bankStatementCombinedDataOnTimedOut': '#/components/schemas/BankStatementValidationHistoryTimelineItem'
+          'incomeVerification:bankStatementDataValidationFailed': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:extractedBankStatementDataValidationFailed': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:bankStatementCombinedDataValidationFailed': '#/components/schemas/BankStatementValidationHistoryTimelineItem'
+          'incomeVerification:overlappingBankStatementsDetected': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:bankStatementDataApplicantMatchFailed': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:bankStatementApplicantMatchFailed': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:payslipCombinedDataValidationSucceeded': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:payslipCombinedDataOnTimedOut': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:payslipDataValidationFailed': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:payslipApplicantMatchFailed': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:incomeFoundBelowRequiredConfidence': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:targetIncomeResultFound': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:complete': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:manuallyClosed': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:verificationTimedOut': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:manuallySuspectedFraud': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:manuallyConfirmedNotFraud': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:manuallyConfirmedFraud': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:incomeManuallyCaptured': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:confirmationCaptured': '#/components/schemas/DefaultHistoryTimelineItem'
+    DefaultHistoryTimelineItem:
+      allOf:
+        - $ref: '#/components/schemas/HistoryTimelineItem'
+    CreatedHistoryTimelineItem:
+      allOf:
+        - $ref: '#/components/schemas/HistoryTimelineItem'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/CreateIncomeVerificationV2'
+    BankStatementValidationHistoryTimelineItem:
+      allOf:
+        - $ref: '#/components/schemas/HistoryTimelineItem'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/BankStatementValidationResultDto'
+    BankStatementValidationResultDto:
+      type: object
+      properties:
+        relativeDate:
+          type: string
+          format: date
+        transactionStartDate:
+          type: string
+          format: date
+        transactionEndDate:
+          type: string
+          format: date
+        maxAgeDays:
+          type: integer
+          format: int32
+        minTransactionDaysRequired:
+          type: integer
+          format: int32
+        minMonthsRequired:
+          type: integer
+          format: int32
+        ageCutOffDate:
+          type: string
+          format: date
+        enoughTransactionsCutOffDate:
+          type: string
+          format: date
+        enoughTransactionsStartDateUsed:
+          type: string
+          format: date
+        transactionDaysPresentAfterCutOffDate:
+          type: integer
+          format: int32
+        transactionCutoffDate:
+          type: string
+          format: date
+        bankStatementAgeIsValid:
+          type: boolean
+        hasEnoughTransactionDays:
+          type: boolean
+        isContiguous:
+          type: boolean
+        hasEnoughData:
+          type: boolean
   securitySchemes:
     bearerAuth:
       type: oauth2
@@ -1510,7 +1674,8 @@ components:
             'incomeVerification:fraud:create': Suspect, and confirm fraud
             'incomeVerification:document:read': Read the state for a document
             'incomeVerification:confirmation:update': Record the confirmation result for an Income Verification case
-            'incomeVerification:filter:read' : Filter Income Verification cases
+            'incomeVerification:filter:read': Filter Income Verification cases
+            'incomeVerification:history:read': Read the history timeline of income verification cases
     ApiKeyAuth:
       type: apiKey
       name: apiKey
