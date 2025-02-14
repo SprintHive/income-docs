@@ -21,3 +21,6 @@ A project to describe how to integrate with SprintHive's income verification API
 ## Release Notes
 
 [v2.3.9 A new document type and status](releaseNotes/release-v2.3.9.md)
+
+## FAQ's
+[Find income FAQ's here](FAQ.md)
