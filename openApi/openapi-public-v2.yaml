@@ -1612,6 +1612,9 @@ components:
         transactionEndDate:
           type: string
           format: date
+        statementEndDate:
+          type: string
+          format: date
         maxAgeDays:
           type: integer
           format: int32
