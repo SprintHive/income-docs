@@ -600,6 +600,9 @@ components:
           $ref: '#/components/schemas/BankStatement'
         payslip:
           $ref: '#/components/schemas/Payslip'
+        tamperDetectionId:
+          type: string
+          nullable: true
     CreateIncomeVerificationV2:
       required:
         - correlationId
@@ -1285,22 +1288,6 @@ components:
         - AUTOMATED_NOTHING_SUSPICIOUS_DETECTED
     FraudHintId:
       type: string
-      x-extensible-enum:
-        - SUSPICIOUS_CREATOR_TOOL
-        - SUSPICIOUS_CREATOR
-        - ACCOUNT_NUMBER_CHANGED
-        - IRREGULAR_ATM_WITHDRAWAL_FEES
-        - SUSPICIOUS_AUTHOR
-        - SUSPICIOUS_SUBJECT
-        - SUSPICIOUS_KEYWORDS
-        - SUSPICIOUS_PRODUCER
-        - INVALID_PAGE_SIZE
-        - MISSING_CREATOR_TOOL
-        - MISSING_AUTHOR
-        - MISSING_TITLE
-        - MISSING_PRODUCER
-        - MISSING_SUBJECT
-        - MODIFIED_TIME
     DocumentStatus:
       type: string
       x-extensible-enum:
@@ -1623,6 +1610,9 @@ components:
           type: string
           format: date
         transactionEndDate:
+          type: string
+          format: date
+        statementEndDate:
           type: string
           format: date
         maxAgeDays:
