@@ -94,7 +94,9 @@ The document status can be used to determine what the problem is and communicati
 | DATA_EXTRACTION_FAILED      | This means the data could not be extracted from the document, the document will not be used to detect income                                                 |
 | TOO_OLD                     | The document is too old as per the business rules, the document will not be used to detect income                                                            |
 | APPLICANT_MATCH_FAILED      | The extracted data does not match the declared data                                                                                                          |
-| EXTRACTION_TYPE_NOT_ENABLED | This status means the document was extracted using an extraction method that is not configured (e.g. OCR) , the document will not be used to detect income   |   
+| EXTRACTION_TYPE_NOT_ENABLED | This status means the document was extracted using an extraction method that is not configured (e.g. OCR), the document will not be used to detect income    |   
 | DATA_EXTRACTION_COMPLETED   | This means that the data was extracted and the document will be used to detect income                                                                        |
 | SUSPECTED_FRAUD             | This means that one of the document tampering checks failed and the whole case should be reviewed by the fraud team (Automated fraud checks must be enabled) |
 | CONFIRMED_FRAUD             | This can happen if the fraud team confirms fraud or if a high risk document tampering check has failed (Automated fraud checks must be enabled)              |
+| DUPLICATE                   | This means that this document is a duplicate of another document already linked to this income verification                                                  |
+| DOCUMENT_TYPE_NOT_ENABLED   | This means that the document type (bank statement or payslip) is not enabled, the document will not be used to detect income                                 |
