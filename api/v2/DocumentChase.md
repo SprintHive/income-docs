@@ -30,7 +30,7 @@ Response:
       }
     ],
     "isContiguous": true,
-    "noOfTransactionDaysOutstanding": 40,
+    "transactionDaysOutstanding": 40,
     "acceptableDateRangesForAdditionalBankStatements": [
       {
         "startDate": "2025-04-26",
@@ -120,11 +120,11 @@ for bank statements and payslips must be met. If false, the case can be complete
 
 **What is outstanding**
 
-| Field                                           | Description                                                                                                                                                                                                                          |
-|-------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| noOfTransactionDaysOutstanding                  | The number of additional days the transaction must cover to pass validation. Note that `noOfTransactionDaysOutstanding` could be 0 while the bank statement requirements are not met yet, if the bank statements are not contiguous. |
-| acceptableDateRangesForAdditionalBankStatements | The list of valid date ranges for additional bank statements not already covered by present bank statements.                                                                                                                         |
-| bankStatementMonthsOutstanding                  | The list of calendar months within the valid date range that does not have sufficient bank statement data yet (do not have `bankStatementMonthsPresent`).                                                                            |
+| Field                                           | Description                                                                                                                                                                                                                        |
+|-------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| transactionDaysOutstanding                      | The number of additional days the transaction must cover to pass validation. Note that `transactionDaysOutstanding` could be 0 while the bank statement requirements are not met yet, if the bank statements are not contiguous.   |
+| acceptableDateRangesForAdditionalBankStatements | The list of valid date ranges for additional bank statements not already covered by present bank statements.                                                                                                                       |
+| bankStatementMonthsOutstanding                  | The list of calendar months within the valid date range that does not have sufficient bank statement data yet (do not have `bankStatementMonthsPresent`).                                                                          |
 
 ## Payslip result
 
