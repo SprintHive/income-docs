@@ -94,13 +94,13 @@ Response:
   }
 }
 ```
-## Response Description
+# Response Description
 Firstly `documentRequirementsMet` show whether the documents required for income verification have been attached to 
 the case. If this is true then no further chasing for documents should be required.
 `bankStatementAndPayslipRequired` is a config set when the income verification is created. If true, the requirements 
 for bank statements and payslips must be met. If false, the case can be completed using either of the document types.
 
-### Bank statement result
+## Bank statement result
 
 | Field                                           | Description                                                                                                                                                                                                                                                                                                          |
 |-------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -126,7 +126,7 @@ for bank statements and payslips must be met. If false, the case can be complete
 | acceptableDateRangesForAdditionalBankStatements | The list of valid date ranges for additional bank statements not already covered by present bank statements.                                                                                                                         |
 | bankStatementMonthsOutstanding                  | The list of calendar months within the valid date range that does not have sufficient bank statement data yet (do not have `bankStatementMonthsPresent`).                                                                            |
 
-### Payslip result
+## Payslip result
 
 | Field                                 | Description                                                                                                                                                                      |
 |---------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
