@@ -150,3 +150,31 @@ for bank statements and payslips must be met. If false, the case can be complete
 | noOfPayslipsOutstanding                  | The number of additional payslips required to meet the `minPayslipsRequired`. Note that `noOfPayslipsOutstanding` could be 0 while the payslip requirements are not met yet, if the payslips are not contiguous. |
 | acceptableDateRangeForAdditionalPayslips | The valid date range for payslips.                                                                                                                                                                               |
 | payslipMonthsOutstanding                 | The list of calendar months within the valid date range that do not have a payslip.                                                                                                                              |
+
+## A use case example
+
+- An income verification for a customer is [created](CreateIncomeVerificationRequest.md) requiring the most recent 3 months bank statement or 3 months payslips.
+
+- The customer uploads some documents, and you receive a [document processed or status changed notification](../../guides/notifications/Notifications.md).
+
+- You check the [state of the income verification](GetIncomeVerificationState.md) and the status is IN_PROGRESS with the subStatus being one of
+WAITING_FOR_DOCUMENTS, PROBLEMS_WITH_DOCUMENTS or DATA_EXTRACTION_FAILED. This means that the document requirements
+necessary for the income verification have not been met yet.
+
+- You get the documentChase results for this income verification using the api outlined above and use the information to 
+craft a communication to the customer requesting additional documents.
+
+Say you get the example response above.
+`documentRequirementsMet`, `bankStatementRequirementsMet` and `payslipRequirementsMet` are all false.
+
+### Example messages:
+"Dear customer, we have received your July {bankStatementMonthsPresent} bank statement(s). In order to satisfy our 
+requirement of 3 months of recent consecutive bank statements {minMonthsRequired} please upload additional statements 
+from June, May and/or April {bankStatementMonthsOutstanding}."
+
+"Dear customer, we have received your May and July {payslipMonthsPresent} payslip(s). We require 3 recent consecutive 
+payslips {minPayslipsRequired}. There is a gap between your uploaded payslips {isContiguous:false}. Please upload 
+additional payslips from June, and/or April {payslipMonthsOutstanding}."
+
+- Some version of a message is sent to the customer requesting particular months of payslips and bank statements.
+- The customer sends additional documents which pass validation. Income is detected and successfully automated.  🥳
