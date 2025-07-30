@@ -335,6 +335,35 @@ paths:
       security:
         - bearerAuth:
             - 'incomeVerification:document:read'
+  '/v2/incomeVerification/{incomeVerificationId}/documentChase':
+    get:
+      tags:
+        - IncomeVerificationV2
+      summary: Get the latest state of outstanding documents
+      operationId: getIncomeVerificationDocumentChase
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          description: Income verification id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/DocumentChase'
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:documentChase:read'
   '/v2/incomeVerification/{incomeVerificationId}/manualCapture/manualIncome':
     post:
       tags:
@@ -668,6 +697,9 @@ components:
           items:
             type: string
           nullable: true
+        disableFraudChecks:
+          type: boolean
+          nullable: true
     MaxAgeDaysConfig:
       type: object
       properties:
@@ -822,6 +854,98 @@ components:
           $ref: '#/components/schemas/TextExtractionType'
         contentType:
           type: string
+    DocumentChase:
+      type: object
+      required:
+        - documentRequirementsMet
+      properties:
+        documentRequirementsMet:
+          type: boolean
+        bankStatementAndPayslipRequired:
+          type: boolean
+        bankStatementChase:
+          $ref: "#/components/schemas/BankStatementChase"
+        payslipChase:
+          $ref: "#/components/schemas/PayslipChase"
+    BankStatementChase:
+      type: object
+      required:
+        - bankStatementRequirementsMet
+      properties:
+        bankStatementRequirementsMet:
+          type: boolean
+        lastDocumentReceivedDate:
+          type: string
+          format: date
+        minTransactionDaysRequired:
+          type:  integer
+        minMonthsRequired:
+          type:  integer
+        transactionDaysPresent:
+          type:  integer
+        transactionDateRangesPresent:
+          type: array
+          items:
+            $ref: "#/components/schemas/DateRange"
+        bankStatementMonthsPresent:
+          type: array
+          items:
+            $ref: "#/components/schemas/YearMonth"
+        isContiguous:
+          type: boolean
+        noOfTransactionDaysOutstanding:
+          type:  integer
+        acceptableDateRangesForAdditionalBankStatements:
+          type: array
+          items:
+            $ref: "#/components/schemas/DateRange"
+        bankStatementMonthsOutstanding:
+          type: array
+          items:
+            $ref: "#/components/schemas/YearMonth"
+    PayslipChase:
+      type: object
+      required:
+        - payslipRequirementsMet
+      properties:
+        payslipRequirementsMet:
+          type: boolean
+        lastDocumentReceivedDate:
+          type: string
+          format: date
+        minPayslipsRequired:
+          type:  integer
+        noOfPayslipsPresent:
+          type:  integer
+        payslipDatesPresent:
+          type: array
+          items:
+            type: string
+            format: date
+        payslipMonthsPresent:
+          type: array
+          items:
+            $ref: "#/components/schemas/YearMonth"
+        isContiguous:
+          type: boolean
+        noOfPayslipsOutstanding:
+          type:  integer
+        acceptableDateRangeForAdditionalPayslips:
+          $ref: "#/components/schemas/DateRange"
+        payslipMonthsOutstanding:
+          type: array
+          items:
+            $ref: "#/components/schemas/YearMonth"
+    YearMonth:
+      type: object
+      required:
+        - year
+        - month
+      properties:
+        year:
+          type: integer
+        month:
+          type: integer
     FraudAnalysisDtoV2:
       type: object
       properties:
@@ -1645,8 +1769,19 @@ components:
           type: boolean
         isContiguous:
           type: boolean
+        contiguityMissingDateRange:
+          $ref: '#/components/schemas/DateRange'
         hasEnoughData:
           type: boolean
+    DateRange:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
   securitySchemes:
     bearerAuth:
       type: oauth2
@@ -1666,6 +1801,7 @@ components:
             'incomeVerification:confirmation:update': Record the confirmation result for an Income Verification case
             'incomeVerification:filter:read': Filter Income Verification cases
             'incomeVerification:history:read': Read the history timeline of income verification cases
+            'incomeVerification:documentChase:read': Read the latest state of outstanding documents for income verification cases
     ApiKeyAuth:
       type: apiKey
       name: apiKey
