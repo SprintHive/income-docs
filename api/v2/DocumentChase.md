@@ -9,89 +9,89 @@ Method: GET
 Response:
 ```json
 {
-	"documentRequirementsMet": false,
-	"bankStatementAndPayslipRequired": false,
-	"bankStatementChase": {
-		"bankStatementRequirementsMet": false,
-		"lastDocumentReceivedDate": "2025-07-30",
-		"minTransactionDaysRequired": 65,
-		"minMonthsRequired": 3,
-		"transactionDaysPresent": 26,
-		"transactionDateRangesPresent": [
-			{
-				"startDate": "2025-06-29",
-				"endDate": "2025-07-25"
-			}
-		],
-		"bankStatementMonthsPresent": [
-			{
-				"year": 2025,
-				"month": 7
-			}
-		],
-		"isContiguous": true,
-		"noOfTransactionDaysOutstanding": 40,
-		"acceptableDateRangesForAdditionalBankStatements": [
-			{
-				"startDate": "2025-04-26",
-				"endDate": "2025-06-29"
-			},
-			{
-				"startDate": "2025-07-25",
-				"endDate": "2025-07-30"
-			}
-		],
-		"bankStatementMonthsOutstanding": [
-			{
-				"year": 2025,
-				"month": 4
-			},
-			{
-				"year": 2025,
-				"month": 5
-			},
-			{
-				"year": 2025,
-				"month": 6
-			}
-		]
-	},
-	"payslipChase": {
-		"payslipRequirementsMet": false,
-        "lastDocumentReceivedDate": "2025-07-29",
-		"minPayslipsRequired": 3,
-		"noOfPayslipsPresent": 2,
-        "payslipDatesPresent": [
-            "2025-05-24",
-            "2025-07-25"
-        ],
-        "payslipMonthsPresent": [
-            {
-                "year": 2025,
-                "month": 5
-            },
-            {
-                "year": 2025,
-                "month": 7
-            }
-        ],
-        "isContiguous": false,
-		"noOfPayslipsOutstanding": 1,
-		"acceptableDateRangeForAdditionalPayslips": {
-			"startDate": "2025-04-29",
-			"endDate": "2025-07-30"
-		},
-		"payslipMonthsOutstanding": [
-			{
-				"year": 2025,
-				"month": 4
-			},
-			{
-				"year": 2025,
-				"month": 6
-			}
-		]
-	}
+  "documentRequirementsMet": false,
+  "bankStatementAndPayslipRequired": false,
+  "bankStatementChase": {
+    "bankStatementRequirementsMet": false,
+    "lastDocumentReceivedDate": "2025-07-30",
+    "minTransactionDaysRequired": 65,
+    "minMonthsRequired": 3,
+    "transactionDaysPresent": 26,
+    "transactionDateRangesPresent": [
+      {
+        "startDate": "2025-06-29",
+        "endDate": "2025-07-25"
+      }
+    ],
+    "bankStatementMonthsPresent": [
+      {
+        "year": 2025,
+        "month": 7
+      }
+    ],
+    "isContiguous": true,
+    "noOfTransactionDaysOutstanding": 40,
+    "acceptableDateRangesForAdditionalBankStatements": [
+      {
+        "startDate": "2025-04-26",
+        "endDate": "2025-06-29"
+      },
+      {
+        "startDate": "2025-07-25",
+        "endDate": "2025-07-30"
+      }
+    ],
+    "bankStatementMonthsOutstanding": [
+      {
+        "year": 2025,
+        "month": 4
+      },
+      {
+        "year": 2025,
+        "month": 5
+      },
+      {
+        "year": 2025,
+        "month": 6
+      }
+    ]
+  },
+  "payslipChase": {
+    "payslipRequirementsMet": false,
+    "lastDocumentReceivedDate": "2025-07-29",
+    "minPayslipsRequired": 3,
+    "noOfPayslipsPresent": 2,
+    "payslipDatesPresent": [
+      "2025-05-24",
+      "2025-07-25"
+    ],
+    "payslipMonthsPresent": [
+      {
+        "year": 2025,
+        "month": 5
+      },
+      {
+        "year": 2025,
+        "month": 7
+      }
+    ],
+    "isContiguous": false,
+    "noOfPayslipsOutstanding": 1,
+    "acceptableDateRangeForAdditionalPayslips": {
+      "startDate": "2025-04-29",
+      "endDate": "2025-07-30"
+    },
+    "payslipMonthsOutstanding": [
+      {
+        "year": 2025,
+        "month": 4
+      },
+      {
+        "year": 2025,
+        "month": 6
+      }
+    ]
+  }
 }
 ```
 ## Response Description
@@ -104,26 +104,49 @@ for bank statements and payslips must be met. If false, the case can be complete
 
 | Field                                           | Description                                                                                                                                                                                                                                                                                                          |
 |-------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| bankStatementRequirementsMet                    | This is true if sufficient bank statements are present, false if the bank statement requirements have not been met                                                                                                                                                                                                   |
+| bankStatementRequirementsMet                    | This is true if sufficient bank statements are present, false if the bank statement requirements have not been met.                                                                                                                                                                                                  |
 | lastDocumentReceivedDate                        | This is the last date when a valid bank statement was uploaded to the income verification. This date will not be updated for a bank statement that is entirely too old or does not match the applicant.                                                                                                              |
 | minTransactionDaysRequired                      | This is the minimum number of days required between the first transaction to the last transaction from the bank statements. There need not be transactions on every day inbetween.                                                                                                                                   |
 | minMonthsRequired                               | If there are additional transactions present beyond the `minTransactionDaysRequired` requirement, up to `minMonthsRequired` worth of data will be used for determining income. `minMonthsRequired` is rounded up from the `minTransactionDaysRequired`. Eg 15 days to 1 month, 65 days to 3 months, 165 to 6 months. |
 
 **What is present**
 
-| Field                                           | Description                                                                                                                                                                                                                                                                                                       |
-|-------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| transactionDaysPresent                          | The number of days between the first and last transaction present that are recent enough.                                                                                                                                                                                                                         |
-| transactionDateRangesPresent                    | The valid date ranges of bank statement transactions that are present                                                                                                                                                                                                                                             |   
-| bankStatementMonthsPresent                      | This list of calendar months is derived from the `transactionDateRangesPresent`. If at least 15 days are covered in a calendar month, that month will be counted as "present". If no calendar months have 15 days of transactions then the signle month with the monst transactions will be counted as "present". |
-| isContiguous                                    | This will be true if there are no large gaps between bank statements. If `isContiguous` is false, then there is at least a month missing between two other bank statements uploaded.                                                                                                                              |
+| Field                                           | Description                                                                                                                                                                                                                                                                                                      |
+|-------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| transactionDaysPresent                          | The number of days between the first and last transaction present that are recent enough.                                                                                                                                                                                                                        |
+| transactionDateRangesPresent                    | The valid date ranges of bank statement transactions that are present.                                                                                                                                                                                                                                           |   
+| bankStatementMonthsPresent                      | This list of calendar months is derived from the `transactionDateRangesPresent`. If at least 15 days are covered in a calendar month, that month will be counted as "present". If no calendar months have 15 days of transactions then the single month with the most transactions will be counted as "present". |
+| isContiguous                                    | This will be true if there are no large gaps between bank statements. If `isContiguous` is false, then there is at least a month missing between two other bank statements uploaded.                                                                                                                             |
 
 **What is outstanding**
 
-| Field                                           | Description                                                                                                                                                                                                                        |
-|-------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| noOfTransactionDaysOutstanding                  | The number of addition days the transaction must cover to pass validation. Note that `noOfTransactionDaysOutstanding` could be 0 while the bank statement requirements are not met yet, if the bank statements are not contiguous. |
-| acceptableDateRangesForAdditionalBankStatements | The list of valid date ranges for additional bank statements not already covered by present bank statements                                                                                                                        |
-| bankStatementMonthsOutstanding                  | The list of calendar months within the valid date range that does not have sufficient bank statement data yet (do not have `bankStatementMonthsPresent`).                                                                          |
+| Field                                           | Description                                                                                                                                                                                                                          |
+|-------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| noOfTransactionDaysOutstanding                  | The number of additional days the transaction must cover to pass validation. Note that `noOfTransactionDaysOutstanding` could be 0 while the bank statement requirements are not met yet, if the bank statements are not contiguous. |
+| acceptableDateRangesForAdditionalBankStatements | The list of valid date ranges for additional bank statements not already covered by present bank statements.                                                                                                                         |
+| bankStatementMonthsOutstanding                  | The list of calendar months within the valid date range that does not have sufficient bank statement data yet (do not have `bankStatementMonthsPresent`).                                                                            |
 
 ### Payslip result
+
+| Field                                 | Description                                                                                                                                                                      |
+|---------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| payslipRequirementsMet                | This is true if sufficient payslip are present, false if the payslip requirements have not been met.                                                                             |
+| lastDocumentReceivedDate              | This is the last date when a valid payslip was uploaded to the income verification. This date will not be updated for a payslip that is too old or does not match the applicant. |
+| minPayslipsRequired                   | This is the minimum number of payslips required to pass validation.                                                                                                              |
+
+**What is present**
+
+| Field                              | Description                                                                                                                                                                                                                     |
+|------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| noOfPayslipsPresent                | The number of valid payslips that are attached to this income verification.                                                                                                                                                     |
+| payslipDatesPresent                | The document dates of the payslips present.                                                                                                                                                                                     |   
+| payslipMonthsPresent               | This list of calendar months that have a payslip present.                                                                                                                                                                       |
+| isContiguous                       | This will be true if there are no large gaps exceeding the pay cycle (monthly, fortnightly or weekly) between payslips. If `isContiguous` is false, then there is a gap of missing payslips between the other payslips present. |
+
+**What is outstanding**
+
+| Field                                    | Description                                                                                                                                                                                                      |
+|------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| noOfPayslipsOutstanding                  | The number of additional payslips required to meet the `minPayslipsRequired`. Note that `noOfPayslipsOutstanding` could be 0 while the payslip requirements are not met yet, if the payslips are not contiguous. |
+| acceptableDateRangeForAdditionalPayslips | The valid date range for payslips.                                                                                                                                                                               |
+| payslipMonthsOutstanding                 | The list of calendar months within the valid date range that do not have a payslip.                                                                                                                              |
