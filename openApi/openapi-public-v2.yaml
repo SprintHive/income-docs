@@ -878,23 +878,27 @@ components:
           type: string
           format: date
         minTransactionDaysRequired:
-          type:  integer
+          type: integer
         minMonthsRequired:
-          type:  integer
+          type: integer
         transactionDaysPresent:
-          type:  integer
+          type: integer
         transactionDateRangesPresent:
           type: array
           items:
             $ref: "#/components/schemas/DateRange"
+        noOfMonthsPresent:
+          type: integer
         bankStatementMonthsPresent:
           type: array
           items:
             $ref: "#/components/schemas/YearMonth"
         isContiguous:
           type: boolean
-        noOfTransactionDaysOutstanding:
-          type:  integer
+        transactionDaysOutstanding:
+          type: integer
+        noOfMonthsOutstanding:
+          type: integer
         acceptableDateRangesForAdditionalBankStatements:
           type: array
           items:
@@ -914,9 +918,9 @@ components:
           type: string
           format: date
         minPayslipsRequired:
-          type:  integer
+          type: integer
         noOfPayslipsPresent:
-          type:  integer
+          type: integer
         payslipDatesPresent:
           type: array
           items:
@@ -929,7 +933,7 @@ components:
         isContiguous:
           type: boolean
         noOfPayslipsOutstanding:
-          type:  integer
+          type: integer
         acceptableDateRangeForAdditionalPayslips:
           $ref: "#/components/schemas/DateRange"
         payslipMonthsOutstanding:
