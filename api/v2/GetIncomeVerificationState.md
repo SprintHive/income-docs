@@ -82,6 +82,10 @@ When the status is SUCCESS and result.status is "HIGH_CONFIDENCE" the income has
 When the status is CONFIRMED_FRAUD the application should be sent to the fraud department for review.  
 When the status is FAILED the application can be sent for manual review.  
 
+If the status is IN_PROGRESS and the subStatus is one of WAITING_FOR_DOCUMENTS, PROBLEMS_WITH_DOCUMENTS or 
+DATA_EXTRACTION_FAILED, then the document requirements necessary for the income verification have not been met yet. 
+Consider using the [document chase api](DocumentChase.md) to see more details on what documents still required.
+
 ## What do the different Document Statuses mean?
 
 Document statuses can be useful when the case status is IN_PROGRESS and the sub status is PROBLEMS_WITH_DOCUMENTS. 
