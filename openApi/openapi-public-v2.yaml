@@ -1375,6 +1375,8 @@ components:
       properties:
         hintId:
           $ref: "#/components/schemas/FraudHintId"
+        displayName:
+          type: string
         riskCategory:
           type: string
           x-extensible-enum:
