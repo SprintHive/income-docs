@@ -13,6 +13,7 @@ Below is an example response for an income verification where 3 months bank stat
 The bank statement for july has been supplied but two more months are required. The May and July payslips have been 
 supplied, but at least one more payslip is required and there cannot be a month missing in the middle (they must be 
 contiguous). 
+There result is calculated at though the api was called on 2025-07-30.
 
 Response:
 ```json
