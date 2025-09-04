@@ -1103,6 +1103,8 @@ components:
             $ref: "#/components/schemas/Payment"
         payDay:
           type: integer
+        payWeekDay:
+          type: integer
         payCycle:
           type: integer
         docIds:
