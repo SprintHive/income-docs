@@ -107,5 +107,5 @@ The document status can be used to determine what the problem is and communicati
 | DOCUMENT_TYPE_NOT_ENABLED   | This means that the document type (bank statement or payslip) is not enabled, the document will not be used to detect income                                 |
 
 ### Pay Day
-- The `payDay` is the day of the month that the applicant is most often paid. If there is a tie the latest day of the month will be used. This pay day is calculated from the list of bank statement payments.
-- The `payWeekDay` is the day of the week that the applicant is most often paid. The week day is an integer between 1 and 7 (1 being Monday, 2 being Tuesday to 7 being Sunday). If there is a tie the latest day of the week will be used. This pay day of the week is calculated from the list of bank statement payments.
+- The `payDay` is the day of the month that the applicant is most often paid. If there is a tie, then the latest day of the month will be used. This pay day is calculated from the list of bank statement payments.
+- The `payWeekDay` is the day of the week that the applicant is most often paid. The week day is an integer between 1 and 7 (1 being Monday, 2 being Tuesday to 7 being Sunday). If there is a tie, then the latest day of the week will be used. This pay day of the week is calculated from the list of bank statement payments.
