@@ -45,7 +45,7 @@ Response:
           }
         ],
         "payDay": 29,
-        "payWeekDay": 2,
+        "payDayOfWeek": 2,
         "payCycle": 30
       }
     }
@@ -108,4 +108,4 @@ The document status can be used to determine what the problem is and communicati
 
 ### Pay Day
 - The `payDay` is the day of the month that the applicant is most often paid. If there is a tie, then the latest day of the month will be used. This pay day is calculated from the list of bank statement payments.
-- The `payWeekDay` is the day of the week that the applicant is most often paid. The week day is an integer between 1 and 7 (1 being Monday, 2 being Tuesday to 7 being Sunday). If there is a tie, then the latest day of the week will be used. This pay day of the week is calculated from the list of bank statement payments.
+- The `payDayOfWeek` is the day of the week that the applicant is most often paid. The week day is an integer between 1 and 7 (1 being Monday, 2 being Tuesday to 7 being Sunday). If there is a tie, then the latest day of the week will be used. This pay day of the week is calculated from the list of bank statement payments.
