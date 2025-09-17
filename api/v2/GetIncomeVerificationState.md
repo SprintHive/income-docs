@@ -73,9 +73,9 @@ The following table explains the status and subStatus in the example response ab
 | FAILED            | PROBLEMS_WITH_DOCUMENTS  | Income was not detected because the business rules were not met                                                             |
 | FAILED            | DATA_EXTRACTION_FAILED   | Income was not detected because the was a problem with extracting the data                                                  |
 | FAILED            | NO_INCOME_DETECTED       | Enough documents were received to try and detect income but income could not be found within the time allowed               |
-| CONFIRMED_FRAUD   | CONFIRMED_DOCUMENT_FRAUD | At least one document has failed a failed a check that is classified as high risk                                           |
+| CONFIRMED_FRAUD   | CONFIRMED_DOCUMENT_FRAUD | At least one document has failed a check that is classified as high risk                                                    |
 | CONFIRMED_FRAUD   | MANUAL_CONFIRMED_FRAUD   | Either an agent or third party system has confirmed                                                                         |
-| CONFIRMED_FRAUD   | CONFIRMED_CASE_FRAUD     | The case has failed a failed a check that is classified as high risk                                                        |
+| CONFIRMED_FRAUD   | CONFIRMED_CASE_FRAUD     | The case has failed a check that is classified as high risk                                                                 |
 
 ### How to route the applications based on status
 
