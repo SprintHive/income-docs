@@ -576,6 +576,35 @@ paths:
       security:
         - bearerAuth:
             - 'incomeVerification:history:read'
+  '/v2/incomeVerification/{incomeVerificationId}/upload':
+    post:
+      tags:
+        - IncomeVerificationV2
+      summary: Create an upload request to chase the missing income documents
+      operationId: createUploadRequest
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          description: Income verification id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadRequestV1'
+        required: true
+      responses:
+        '200':
+          description: Operation succeeded
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/UploadRequestResultV1'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:upload'
 components:
   schemas:
     ErrorDetail:
@@ -696,6 +725,12 @@ components:
           type: array
           items:
             type: string
+          nullable: true
+        expectedCurrency:
+          type: string
+          x-extensible-enum:
+            - ZAR
+            - NAD
           nullable: true
         disableFraudChecks:
           type: boolean
@@ -1066,6 +1101,10 @@ components:
           type: string
         bankAccountNumber:
           type: string
+        foundCurrency:
+          type: string
+        requestedCurrency:
+          type: string
         analysisResult:
           $ref: '#/components/schemas/AnalysisResultV2'
         profileResult:
@@ -1230,6 +1269,10 @@ components:
         accountNumber:
           type: string
         bank:
+          type: string
+        foundCurrency:
+          type: string
+        requestedCurrency:
           type: string
     Transaction:
       type: object
@@ -1507,6 +1550,8 @@ components:
             type: string
         matchPhrase:
           type: boolean
+        filterType:
+          type: string
     FilterRequest:
       type: object
       properties:
@@ -1708,9 +1753,9 @@ components:
           'incomeVerification:complete': '#/components/schemas/DefaultHistoryTimelineItem'
           'incomeVerification:manuallyClosed': '#/components/schemas/DefaultHistoryTimelineItem'
           'incomeVerification:verificationTimedOut': '#/components/schemas/DefaultHistoryTimelineItem'
-          'incomeVerification:manuallySuspectedFraud': '#/components/schemas/DefaultHistoryTimelineItem'
-          'incomeVerification:manuallyConfirmedNotFraud': '#/components/schemas/DefaultHistoryTimelineItem'
-          'incomeVerification:manuallyConfirmedFraud': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:manuallySuspectedFraud': '#/components/schemas/ManuallySuspectedFraudHistoryTimelineItem'
+          'incomeVerification:manuallyConfirmedNotFraud': '#/components/schemas/ManuallyConfirmedNotFraudHistoryTimelineItem'
+          'incomeVerification:manuallyConfirmedFraud': '#/components/schemas/ManuallyConfirmedFraudHistoryTimelineItem'
           'incomeVerification:incomeManuallyCaptured': '#/components/schemas/DefaultHistoryTimelineItem'
           'incomeVerification:confirmationCaptured': '#/components/schemas/DefaultHistoryTimelineItem'
     DefaultHistoryTimelineItem:
@@ -1725,6 +1770,33 @@ components:
           properties:
             data:
               $ref: '#/components/schemas/CreateIncomeVerificationV2'
+    ManuallySuspectedFraudHistoryTimelineItem:
+      allOf:
+        - $ref: '#/components/schemas/HistoryTimelineItem'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/SuspectedFraudV2'
+    ManuallyConfirmedNotFraudHistoryTimelineItem:
+      allOf:
+        - $ref: '#/components/schemas/HistoryTimelineItem'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/ConfirmNotFraudV2'
+    ManuallyConfirmedFraudHistoryTimelineItem:
+      allOf:
+        - $ref: '#/components/schemas/HistoryTimelineItem'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/ConfirmFraudV2'
     BankStatementValidationHistoryTimelineItem:
       allOf:
         - $ref: '#/components/schemas/HistoryTimelineItem'
@@ -1790,6 +1862,72 @@ components:
         endDate:
           type: string
           format: date
+    UploadRequestV1:
+      required:
+        - customer
+      type: object
+      properties:
+        product:
+          $ref: '#/components/schemas/Product'
+        customer:
+          $ref: '#/components/schemas/Customer'
+        tenant:
+          $ref: '#/components/schemas/Tenant'
+        correlationId:
+          type: string
+        configurationProfile:
+          $ref: '#/components/schemas/ConfigurationProfileV1'
+    Product:
+      type: object
+      required:
+        - code
+        - name
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+    Customer:
+      type: object
+      required:
+        - name
+        - mobileNumber
+      properties:
+        name:
+          type: string
+        mobileNumber:
+          type: string
+        emailAddress:
+          type: string
+    Tenant:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    ConfigurationProfileV1:
+      type: object
+      required:
+        - configProfileId
+        - purposeId
+      properties:
+        configProfileId:
+          type: string
+        purposeId:
+          type: string
+        additionalTemplateProperties:
+          type: object
+          additionalProperties:
+            type:
+              string
+    UploadRequestResultV1:
+      required:
+        - uploadRequestId
+      type: object
+      properties:
+        uploadRequestId:
+          type: string
   securitySchemes:
     bearerAuth:
       type: oauth2
@@ -1810,6 +1948,7 @@ components:
             'incomeVerification:filter:read': Filter Income Verification cases
             'incomeVerification:history:read': Read the history timeline of income verification cases
             'incomeVerification:documentChase:read': Read the latest state of outstanding documents for income verification cases
+            'incomeVerification:upload': Create an upload request
     ApiKeyAuth:
       type: apiKey
       name: apiKey
