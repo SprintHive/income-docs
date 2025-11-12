@@ -18,7 +18,9 @@ Example response:
       "date": "2022-03-20",
       "description": "FEE-POS DECLINED INSUFF FUNDS Checkers Long beach 5709",
       "balance": 12.45,
-      "transactionValue": -7.90
+      "transactionValue": -7.90,
+      "inPrimaryIncomeStream": false,
+      "inOtherIncomeStream": false
     },
     ...
   ],
@@ -31,6 +33,12 @@ Example response:
   }
 }
 ```
+
+### Detected income
+Transactions that were selected as the primary income will be identified with `"inPrimaryIncomeStream": true`. 
+If "otherIncome" was declared when creating the income verification, transactions that were selected as that other 
+income will be identified with `"inOtherIncomeStream": true`. All other transactions that were not identified as income 
+will have these fields be false, as in the example above.
 
 ## Enriched Transactions
 This endpoint will return the consolidated list of transactions that were used to determine income. Additional 
@@ -82,6 +90,8 @@ Example response:
       "description": "FEE-POS DECLINED INSUFF FUNDS Checkers Long beach 5709",
       "balance": 12.45,
       "transactionValue": -7.90,
+      "inPrimaryIncomeStream": false,
+      "inOtherIncomeStream": false,
       "failureIndicator": true,
       "thirdParty": {
         "name": "Checkers",

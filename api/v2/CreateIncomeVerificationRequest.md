@@ -122,7 +122,7 @@ Response:
 ```json
 {
   "config": {
-    "documentWhiteList" : ["payslip"],
+    "documentTypeWhiteList" : ["payslip"],
     "minPayslipsRequired": 1,
     "bankStatementAndPayslipRequired": false,
     "maxAgeDays": {
@@ -137,7 +137,7 @@ Response:
 {
   "config": {
     "minTransactionDaysRequired": 160,
-    "documentWhiteList" : ["bank-statement"],
+    "documentTypeWhiteList" : ["bank-statement"],
     "bankStatementAndPayslipRequired": false,
     "maxAgeDays": {
       "bank-statement": 32
@@ -210,7 +210,7 @@ The following strategies are available by default:
  - max - When using multiple months the system will find the consistent income steam over the selected months and use the largest amount  
  - irregular - The system will add up all the income transactions excluding specific income transactions, like loans received, and calculate the average of the monthly totals 
 
-### documentWhiteList
+### documentTypeWhiteList
 
 The allowed documents for verifying this income request, when null all document types are allowed. This overrides any config set at the service level. 
 
