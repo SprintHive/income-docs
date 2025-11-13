@@ -141,6 +141,35 @@ paths:
       security:
         - bearerAuth:
             - 'incomeVerification:read'
+  '/v2/incomeVerification/{incomeVerificationId}/indicators':
+    get:
+      tags:
+        - IncomeVerificationV2
+      summary: Retrieve indicators for an income verification
+      operationId: getIndicators
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          description: Income verification id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/IndicatorResults'
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:indicator'
   '/v2/incomeVerification/{incomeVerificationId}/document':
     post:
       tags:
@@ -716,6 +745,8 @@ components:
           type: boolean
         passHigherThanDeclaredIncome:
           type: boolean
+        passHigherThanMinIncome:
+          type: boolean
         maxAgeDays:
           $ref: '#/components/schemas/MaxAgeDaysConfig'
         incomeDetectorStrategy:
@@ -735,6 +766,8 @@ components:
         disableFraudChecks:
           type: boolean
           nullable: true
+        minIncome:
+          type: number
     MaxAgeDaysConfig:
       type: object
       properties:
@@ -1758,6 +1791,7 @@ components:
           'incomeVerification:manuallyConfirmedFraud': '#/components/schemas/ManuallyConfirmedFraudHistoryTimelineItem'
           'incomeVerification:incomeManuallyCaptured': '#/components/schemas/DefaultHistoryTimelineItem'
           'incomeVerification:confirmationCaptured': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:indicatorsCalculated': '#/components/schemas/IndicatorResultsHistoryTimelineItem'
     DefaultHistoryTimelineItem:
       allOf:
         - $ref: '#/components/schemas/HistoryTimelineItem'
@@ -1804,6 +1838,15 @@ components:
           properties:
             data:
               $ref: '#/components/schemas/BankStatementValidationResultDto'
+    IndicatorResultsHistoryTimelineItem:
+      allOf:
+        - $ref: '#/components/schemas/HistoryTimelineItem'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/IndicatorResultsHistoryData'
     BankStatementValidationResultDto:
       type: object
       properties:
@@ -1862,6 +1905,42 @@ components:
         endDate:
           type: string
           format: date
+    IndicatorResults:
+      type: object
+      required:
+        - documentRequirementsMet
+        - indicators
+      properties:
+        documentRequirementsMet:
+          type: boolean
+        indicators:
+          type: array
+          items:
+            $ref: '#/components/schemas/Indicator'
+    Indicator:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: number
+    IndicatorResultsHistoryData:
+      type: object
+      required:
+        - documentRequirementsMet
+        - indicators
+        - interimCalculations
+      properties:
+        documentRequirementsMet:
+          type: boolean
+        indicators:
+          type: array
+          items:
+            $ref: '#/components/schemas/Indicator'
+        interimCalculations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Indicator'
     UploadRequestV1:
       required:
         - customer
@@ -1949,6 +2028,7 @@ components:
             'incomeVerification:history:read': Read the history timeline of income verification cases
             'incomeVerification:documentChase:read': Read the latest state of outstanding documents for income verification cases
             'incomeVerification:upload': Create an upload request
+            'incomeVerification:indicator': Read the indicators for an income verification
     ApiKeyAuth:
       type: apiKey
       name: apiKey
