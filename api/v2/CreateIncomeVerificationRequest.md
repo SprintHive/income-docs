@@ -184,6 +184,11 @@ It should be less than 70 characters long. This will be used to link back to you
 via the web hook or sns. The `correlationId` and `incomeVerificationId` should be stored in a reference table for easy 
 usage later.
 
+If tenant config `idempotentOnCreate: true` then every income verification created must have a unique `correlationId`. 
+If you attempt to create a case with a correlationId that already exists in the environment there are two scenarios: 
+- If the body of the request is different, you will get a 400 invalid input and the case will not be created. 
+- If the body hasn't changed then the response will return the `incomeVerificationId` of the original case. No new case will be created.
+
 ### declaration.grossIncome
 
 The applicant's gross income as per their payslip
