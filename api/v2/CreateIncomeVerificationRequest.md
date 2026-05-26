@@ -1,6 +1,6 @@
 # Create Income Verification Request
 
-This endpoint is used to create an income verification request.  
+This endpoint is used to create an income verification request. The returned `incomeVerificationId` is the primary identifier used in all subsequent API calls for this case. The `incomeVerificationId` should be stored alongside your primary key `correlationId` for easy reference.  
 
 ## Prerequisites
 * You have read and understand the security section [click here for more details](../../guides/security/CreatingJsonWebToken.md)
@@ -171,7 +171,7 @@ completely process a case
 
 ### maxAgeDays.bank-statement
 
-Maximum allowed age of a bank statement in days, if older will be ignored
+Maximum allowed age in days of the end of a bank statement, if older will be ignored
 
 ### maxAgeDays.maxAgeDays.payslip
 
@@ -180,7 +180,9 @@ Maximum allowed age of a payslip in days, if older will be ignored
 ### correlationId
 
 The calling system's unique identifier for this income request. Typically, the customer's application ID. 
-This will be used to link back to your system if you use push notification via the web hook
+It should be less than 70 characters long. This will be used to link back to your system if you use push notification 
+via the web hook or sns. The `correlationId` and `incomeVerificationId` should be stored in a reference table for easy 
+usage later.
 
 ### declaration.grossIncome
 
@@ -189,11 +191,13 @@ The applicant's gross income as per their payslip
 ### declaration.nettIncome
 
 The applicant's net take home pay as per their payslip or bank statement
-This is generally a required field. See [here](IncomeFromBankStatementAndPayslip.md) for when it can become optional.
+This is a required field. It must be a positive number. It cannot be 0, negative or blank.
+See [here](IncomeFromBankStatementAndPayslip.md) for when it can become optional.
 
 ### declaration.payCycleInDays
 
 How often the applicant gets paid (e.g. 7 for weekly, 14 for fortnightly, 30 for monthly)
+This is an optional field, but when it is specified it must be a positive integer. It cannot be 0 or negative.
 
 > Defaults to 30
 
@@ -206,7 +210,7 @@ Different income detector strategies can be used depending on how the applicant 
 The following strategies are available by default:
 
  - min - When using multiple months the system will find the consistent income steam over the selected months and use the smallest amount  
- - average -When using multiple months the system will find the consistent income steam over the selected months and use the average of the amounts found  
+ - average - When using multiple months the system will find the consistent income steam over the selected months and use the average of the amounts found  
  - max - When using multiple months the system will find the consistent income steam over the selected months and use the largest amount  
  - irregular - The system will add up all the income transactions excluding specific income transactions, like loans received, and calculate the average of the monthly totals 
 
