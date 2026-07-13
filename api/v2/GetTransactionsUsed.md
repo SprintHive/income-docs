@@ -114,3 +114,23 @@ Example response:
   }
 }
 ```
+
+## Download Transactions as a csv file
+This endpoint will download the consolidated list of transactions that were used to determine income as a csv file (opens in Excel). 
+All transaction enrichments that are enabled in your environment will also be returned in this file.
+The file will have the name "transactions-{incomeVerificationId}.csv"
+
+Endpoint: ```/v2/incomeVerification/{incomeVerificationId}/transactions/download/csv```  
+Method: GET
+
+Example response:
+file name: transactions-8e55aa90-8afe-444c-9c6a-686f36c70e3f.csv
+The table below represents the contents of the csv file:
+
+| Date       | Description | Amount | Balance  | Category | Transaction Type | Third Party | Third Party Sub Division | Tags | Failure Indicator | In Primary Income Stream | In Other Income Stream |
+|------------|-------------|--------|----------|----------|-----------------|-------------|--------------------------|------|-------------------|--------------------------|------------------------|
+| 2026-05-20 | Live Better Round-up Transfer | -2.85 | 1614.98  | Automatic Savings | Mobile Transfer | Capitec | Live Better Round-up Transfer | Automatic Savings | | FALSE | FALSE |
+| 2026-05-22 | Arthur Ford Goldenwalk Germiston (Card 1234) | -100.00 | 1514.98  | Car Repayment | Card | Ford | Ford | Car Repayment | | FALSE | FALSE |
+| 2026-05-22 | Payment Received: Mamathabi Payment 2678380750 | 420.00 | 1934.98  | | Direct Payment | | | Direct Payment | | FALSE | FALSE |
+| 2026-05-22 | Banking App External Payment: Sars | -102.00 | 1832.98  | Tax | Mobile Payment | SARS | SARS | Tax | | FALSE | FALSE |
+| 2026-05-25 | Payment Received: Nhighere63 63 Pay3161821900470salary 2728392253 | 17011.26 | 18844.24 | Salary/Wages | Direct Payment | | | Salary/Wages | | TRUE | FALSE |
