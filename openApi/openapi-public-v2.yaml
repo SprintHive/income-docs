@@ -482,6 +482,36 @@ paths:
       security:
         - bearerAuth:
             - 'incomeVerification:state:read'
+  '/v2/incomeVerification/{incomeVerificationId}/transactions/download/csv':
+    get:
+      tags:
+        - IncomeVerificationV2
+      summary: Download the consolidated list of transactions and their enrichments as a CSV file (opens in Excel).
+      operationId: downloadIncomeVerificationTransactionsCsv
+      parameters:
+        - name: incomeVerificationId
+          in: path
+          description: Income verification id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A CSV file containing the transactions and their enrichments.
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+      security:
+        - bearerAuth:
+            - 'incomeVerification:state:read'
   '/v2/incomeVerification/{incomeVerificationId}/confirmation':
     post:
       tags:
