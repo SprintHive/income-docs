@@ -140,6 +140,7 @@ An example of the response when the document is a bank statement with additional
     }
 }
 ```
+## Transaction enrichments
 
 ### failureIndicator
 Failed Debit Order / Failed Transaction Detection: 
@@ -156,3 +157,7 @@ Where possible the other party involved in the transaction is identified. This i
 ### transactionType
 Transaction type detection: 
 The transaction type is marked on the transaction where possible e.g. card transaction, debit order, online transfer, stop order etc.
+
+## Full list of extracted bank names from bank statements 
+Absa Bank, Access, African Bank, Albaraka Bank, Bank Windhoek, Bidvest Bank, Capitec Bank, Discovery Bank, Finbond Mutual Bank, First National Bank, Grindrod Bank, HBZ Bank, Habib Overseas Bank, Investec Bank, Mercantile Bank, Nedbank, Sasfin Bank, Standard Bank, Tyme Bank, UBANK
+
