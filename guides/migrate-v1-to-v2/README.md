@@ -25,7 +25,7 @@ Before:
   "physicalEntity": {
     "idNumber": "1234567890",
     "firstName": "Joe",
-    "lastName": "Soap",
+    "surname": "Soap",
     "bankName": "Nedbank",
     "bankAccountNumber": "1180234567",
     ...
@@ -47,7 +47,7 @@ After:
   "applicantDetails": {
     "idNumber": "1234567890",
     "firstName": "Joe",
-    "lastName": "Soap",
+    "surname": "Soap",
     "bankName": "Nedbank",
     "bankAccountNumber": "1180234567",
     ...

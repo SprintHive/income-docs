@@ -6,7 +6,7 @@ The purpose of the quick start guide is to provide the simplest scenario to inte
 
  * A Json Web Token - please see the [security section for more details](../security/CreatingJsonWebToken.md)
  * API Key - this will be provided by SprintHive and must be added to the header of the request
- * An environment to test against - this will provisioned by SprintHive
+ * An environment to test against - this will be provisioned by SprintHive
  * An example bank statement
 
 > A postman collection can be found in the postman directory
@@ -88,7 +88,7 @@ Response:
         "detectedNettIncome": 19226.92,
         "confidence": 0.9892,
         "variance": -0.04021,
-        "payDates": [
+        "payments": [
           {
             "date": "2021-05-01",
             "amount": 19226.92

@@ -6,7 +6,7 @@ The following endpoint can be used to fetch the current state of an income verif
 * You have read and understand the security section [click here for more details](../../guides/security/CreatingJsonWebToken.md)
 
 This can be used for the following reasons:
-* what the result of the income verification request
+* get the result of the income verification request
 * get all the documents linked to the income verification request
 * get the detected nett income
 
@@ -75,25 +75,25 @@ Response:
 
 The following table explains the status and subStatus in the example response above. 
 
-| Status            | SubStatus                | Description                                                                                                                                                                     |
-|-------------------|--------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| IN_PROGRESS       | WAITING_FOR_DOCUMENTS    | Waiting for documents to determine income                                                                                                                                       |
-| IN_PROGRESS       | PROBLEMS_WITH_DOCUMENTS  | One or more documents have been received that has failed business rules e.g. document is too old or could not be classified                                                     |
-| IN_PROGRESS       | DATA_EXTRACTION_FAILED   | One or more documents have failed data extraction                                                                                                                               |
-| IN_PROGRESS       | NO_INCOME_DETECTED       | Enough documents were received to try and detect income but income could not be found                                                                                           |
-| IN_PROGRESS       | LOW_INCOME_CONFIDENCE    | Income was found but the system is not confident with the answer                                                                                                                |
-| REFERRED_TO_FRAUD | SUSPECTED_DOCUMENT_FRAUD | One or more documents has failed a fraud check. The front end SprintHive console will show Status and SubStatus "Potential Doc Tampering"                                       |
-| REFERRED_TO_FRAUD | SUSPECTED_CASE_FRAUD     | An agent or third party system has suspected fraud. The front end SprintHive console will show Status "Potential Doc Tampering" and SubStatus "Potential case tampering"        |
-| SUCCESS           | HIGH_INCOME_CONFIDENCE   | Income was successfully detected and the system is confident with its answer                                                                                                    |
-| SUCCESS           | MANUALLY_CAPTURED        | Income was successfully captured by an agent or third party system                                                                                                              |
-| SUCCESS           | LOW_INCOME_CONFIDENCE    | Income was successfully detected but the system is not confident with the answer                                                                                                |
-| FAILED            | WAITING_FOR_DOCUMENTS    | Income was not detected because we did not receive enough documents within the time allowed                                                                                     |
-| FAILED            | PROBLEMS_WITH_DOCUMENTS  | Income was not detected because the business rules were not met                                                                                                                 |
-| FAILED            | DATA_EXTRACTION_FAILED   | Income was not detected because the was a problem with extracting data from the income documents                                                                                |
-| FAILED            | NO_INCOME_DETECTED       | Enough documents were received to try and detect income but income could not be found within the time allowed                                                                   |
-| CONFIRMED_FRAUD   | CONFIRMED_DOCUMENT_FRAUD | At least one document has failed a check that is classified as high risk. The front end SprintHive console will show Status and SubStatus "Confirmed Doc Tampering"             |
-| CONFIRMED_FRAUD   | MANUAL_CONFIRMED_FRAUD   | Either an agent or third party system has confirmed. The front end SprintHive console will show Status "Confirmed Doc Tampering" and SubStatus "Manual confirmed doc tampering" |
-| CONFIRMED_FRAUD   | CONFIRMED_CASE_FRAUD     | The case has failed a check that is classified as high risk. The front end SprintHive console will show Status and SubStatus "Confirmed Doc Tampering"                          |
+| Status            | SubStatus                | Description                                                                                                                                                                           |
+|-------------------|--------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| IN_PROGRESS       | WAITING_FOR_DOCUMENTS    | Waiting for documents to determine income                                                                                                                                             |
+| IN_PROGRESS       | PROBLEMS_WITH_DOCUMENTS  | One or more documents have been received that have failed business rules e.g. document is too old or could not be classified                                                          |
+| IN_PROGRESS       | DATA_EXTRACTION_FAILED   | One or more documents have failed data extraction                                                                                                                                     |
+| IN_PROGRESS       | NO_INCOME_DETECTED       | Enough documents were received to try and detect income but income could not be found                                                                                                 |
+| IN_PROGRESS       | LOW_INCOME_CONFIDENCE    | Income was found but the system is not confident with the answer                                                                                                                      |
+| REFERRED_TO_FRAUD | SUSPECTED_DOCUMENT_FRAUD | One or more documents has failed a fraud check. The front end SprintHive console will show Status and SubStatus "Potential Doc Tampering"                                             |
+| REFERRED_TO_FRAUD | SUSPECTED_CASE_FRAUD     | An agent or third party system has suspected fraud. The front end SprintHive console will show Status "Potential Doc Tampering" and SubStatus "Potential case tampering"              |
+| SUCCESS           | HIGH_INCOME_CONFIDENCE   | Income was successfully detected and the system is confident with its answer                                                                                                          |
+| SUCCESS           | MANUALLY_CAPTURED        | Income was successfully captured by an agent or third party system                                                                                                                    |
+| SUCCESS           | LOW_INCOME_CONFIDENCE    | Income was successfully detected but the system is not confident with the answer                                                                                                      |
+| FAILED            | WAITING_FOR_DOCUMENTS    | Income was not detected because we did not receive enough documents within the time allowed                                                                                           |
+| FAILED            | PROBLEMS_WITH_DOCUMENTS  | Income was not detected because the business rules were not met                                                                                                                       |
+| FAILED            | DATA_EXTRACTION_FAILED   | Income was not detected because there was a problem with extracting data from the income documents                                                                                    |
+| FAILED            | NO_INCOME_DETECTED       | Enough documents were received to try and detect income but income could not be found within the time allowed                                                                         |
+| CONFIRMED_FRAUD   | CONFIRMED_DOCUMENT_FRAUD | At least one document has failed a check that is classified as high risk. The front end SprintHive console will show Status and SubStatus "Confirmed Doc Tampering"                   |
+| CONFIRMED_FRAUD   | MANUAL_CONFIRMED_FRAUD   | Either an agent or third party system has confirmed fraud. The front end SprintHive console will show Status "Confirmed Doc Tampering" and SubStatus "Manual confirmed doc tampering" |
+| CONFIRMED_FRAUD   | CONFIRMED_CASE_FRAUD     | The case has failed a check that is classified as high risk. The front end SprintHive console will show Status and SubStatus "Confirmed Doc Tampering"                                |
 
 ### How to route the applications based on status
 
