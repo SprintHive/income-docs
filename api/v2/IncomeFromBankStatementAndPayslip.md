@@ -8,10 +8,10 @@
 When bankStatementAndPayslipRequired is true when [creating an income verification](CreateIncomeVerificationRequest.md), we
 will get a bank statement income result and a payslip income result once valid documents of each type have been added 
 to the case. These income results will be compared to the declared nett income from the customer. Both the result from 
-the bank statements and payslips must be high confidence for the case to be status: `SUCCESSFUL`, 
-subStatus: `HIGH_CONFIDENCE`.
+the bank statements and payslips must be high confidence for the case to be status: `SUCCESS`, 
+subStatus: `HIGH_INCOME_CONFIDENCE`.
 
-If either result is low confidence, the case subStatus will also be `LOW_CONFIDENCE`.
+If either result is low confidence, the case subStatus will also be `LOW_INCOME_CONFIDENCE`.
 
 # When bankStatementAndPayslipRequired and tenant config bankStatementRelativeToPayslipEnabled are true
 

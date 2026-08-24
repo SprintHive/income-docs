@@ -17,7 +17,7 @@ You can **disable fraud checks** at the case level in testing environments by se
     "disableFraudChecks": true
   },
   "correlationId": "xxxxxx-xxxxxx-xxxxx-xxxxx",
-  "declaration": {
+  "primaryIncome": {
     "grossIncome": 6000,
     "nettIncome": 5000,
     "payCycleInDays": 30

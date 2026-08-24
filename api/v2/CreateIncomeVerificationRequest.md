@@ -173,7 +173,7 @@ completely process a case
 
 Maximum allowed age in days of the end of a bank statement, if older will be ignored
 
-### maxAgeDays.maxAgeDays.payslip
+### maxAgeDays.payslip
 
 Maximum allowed age of a payslip in days, if older will be ignored
 
@@ -189,17 +189,17 @@ If you attempt to create a case with a correlationId that already exists in the 
 - If the body of the request is different, you will get a 400 invalid input and the case will not be created. 
 - If the body hasn't changed then the response will return the `incomeVerificationId` of the original case. No new case will be created.
 
-### declaration.grossIncome
+### primaryIncome.grossIncome
 
 The applicant's gross income as per their payslip
 
-### declaration.nettIncome
+### primaryIncome.nettIncome
 
 The applicant's net take home pay as per their payslip or bank statement
 This is a required field. It must be a positive number. It cannot be 0, negative or blank.
 See [here](IncomeFromBankStatementAndPayslip.md) for when it can become optional.
 
-### declaration.payCycleInDays
+### primaryIncome.payCycleInDays
 
 How often the applicant gets paid (e.g. 7 for weekly, 14 for fortnightly, 30 for monthly)
 This is an optional field, but when it is specified it must be a positive integer. It cannot be 0 or negative.
@@ -214,9 +214,9 @@ Different income detector strategies can be used depending on how the applicant 
 
 The following strategies are available by default:
 
- - min - When using multiple months the system will find the consistent income steam over the selected months and use the smallest amount  
- - average - When using multiple months the system will find the consistent income steam over the selected months and use the average of the amounts found  
- - max - When using multiple months the system will find the consistent income steam over the selected months and use the largest amount  
+ - min - When using multiple months the system will find the consistent income stream over the selected months and use the smallest amount  
+ - average - When using multiple months the system will find the consistent income stream over the selected months and use the average of the amounts found  
+ - max - When using multiple months the system will find the consistent income stream over the selected months and use the largest amount  
  - irregular - The system will add up all the income transactions excluding specific income transactions, like loans received, and calculate the average of the monthly totals 
 
 ### documentTypeWhiteList

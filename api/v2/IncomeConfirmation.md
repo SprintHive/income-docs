@@ -30,7 +30,7 @@ Body:
 }
 ```
 
-The confirmation is returned in the [Get Income Verification State](/api/v2/GetIncomeVerificationState.md) endpoint. 
+The confirmation is returned in the [Get Income Verification State](GetIncomeVerificationState.md) endpoint. 
 
 ```json
 {
