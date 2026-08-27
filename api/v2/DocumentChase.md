@@ -99,9 +99,9 @@ Response:
 ```
 # Response Description
 Firstly `documentRequirementsMet` shows whether the documents required for income verification have been attached to
-the case. If this is true then no further chasing for documents should be required.
+the case. If this is true then no further chasing for documents should be required. 
 `bankStatementAndPayslipRequired` is a config set when the income verification is created. If true, the requirements
-for bank statements and payslips must be met. If false, the case can be completed using either of the document types.
+for bank statements and payslips must be met. If false, the case can be completed using either of the document types. 
 
 Fields that have no value are omitted from the JSON response rather than returned as `null`. The **Presence** column in
 the tables below indicates when a field may be absent.
