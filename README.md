@@ -7,7 +7,8 @@ A project to describe how to integrate with SprintHive's income verification API
 [Security](guides/security/CreatingJsonWebToken.md)  
 [Quick Start](guides/quick-start-guide)  
 [Migrating from V1 to V2](guides/migrate-v1-to-v2)  
-[Notifications](guides/notifications/Notifications.md)
+[Notifications](guides/notifications/Notifications.md)  
+[Data retention and deletion](guides/data-retention/DataRetention.md)
 
 ## API
 [OpenAPI spec](openApi/openapi-public-v2.yaml)  
