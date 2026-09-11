@@ -54,6 +54,48 @@ Response:
 }
 ```
 
+## Errors
+
+A rejected request comes back in the standard error envelope, with one entry in `errors` for each problem found.
+Every error listed below is returned as a `400`. The `401` and `403` responses that apply to every call are
+described in the [security section](../../guides/security/CreatingJsonWebToken.md).
+
+```json
+{
+  "error": {
+    "errorType": "invalid-input",
+    "httpCode": 400,
+    "traceId": "xxxxxx-xxxxxx-xxxxx-xxxxx",
+    "errors": [
+      {
+        "field": "applicantDetails",
+        "errorCode": "applicant-details-mandatory"
+      }
+    ],
+    "timestamp": "2020-01-01T00:00:00.0000000Z"
+  }
+}
+```
+
+| Field                                | Error Type         | Error Code                          | Description                                                                                                                                              |
+|--------------------------------------|--------------------|-------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `applicantDetails`                   | `invalid-input`    | `applicant-details-mandatory`       | Your tenant environment requires applicant details and none were supplied                                                                                |
+| `config.incomeDetectorStrategy`      | `invalid-input`    | `invalid-strategy`                  | The requested income detector strategy is not configured                                                                                                 |
+| `config.expectedCurrency`            | `invalid-input`    | `invalid-value`                     | The expected currency is not one your tenant environment is configured for                                                                               |
+| `config.disableFraudChecks`          | `invalid-input`    | `fraud-checks-cannot-be-disable`    | Fraud checks may not be disabled in this environment                                                                                                     |
+| `primaryIncome.nettIncome`           | `invalid-input`    | `nett-income-required`              | No nett income was declared and based on your config it is required                                                                                      |
+| `primaryIncome.nettIncome`           | `invalid-input`    | `nett-income-not-greater-than-zero` | The declared nett income is not a positive number                                                                                                        |
+| `primaryIncome.payCycleInDays`       | `invalid-input`    | `pay-cycle-not-greater-than-zero`   | The declared pay cycle is not a positive number                                                                                                          |
+| `otherIncome[0].nettIncome`          | `invalid-input`    | `nett-income-required`              | An entry in `otherIncome` declares no nett income                                                                                                        |
+| `otherIncome[0].nettIncome`          | `invalid-input`    | `nett-income-not-greater-than-zero` | An entry in `otherIncome` has a nett income that is not a positive number                                                                                |
+| `otherIncome[0].payCycleInDays`      | `invalid-input`    | `pay-cycle-not-greater-than-zero`   | An entry in `otherIncome` has a pay cycle that is not a positive number                                                                                  |
+| `config.createDocumentTypeWhiteList` | `invalid-input`    | `whiteList-empty`                   | The supplied document type white list is an empty array                                                                                                  |
+| `config.createDocumentTypeWhiteList` | `invalid-input`    | `whiteList-invalid-doc-types`       | The supplied document type white list contains an unrecognised document type                                                                             |
+| `correlationId`                      | `invalid-input`    | `idempotency-different-payload`     | The `correlationId` was already used for a case created with a different payload. Reuse of a `correlationId` is only idempotent for an identical payload |
+| `applicantDetails.mobileNumber`      | `validation-error` | `Pattern`                           | The applicant mobile number is not a valid South African mobile number                                                                                   |
+
+The index in `otherIncome[0]` is illustrative - the index reported is that of the offending entry in the array you sent.
+
 ## Common Configurations
 
 ### One month Bank statement or Payslip in the last 3 months
@@ -186,7 +228,7 @@ usage later.
 
 If tenant config `idempotentOnCreate: true` then every income verification created must have a unique `correlationId`. 
 If you attempt to create a case with a correlationId that already exists in the environment there are two scenarios: 
-- If the body of the request is different, you will get a 400 invalid input and the case will not be created. 
+- If the body of the request is different, you will get a 400 invalid input (`idempotency-different-payload`, see [Errors](#errors)) and the case will not be created. 
 - If the body hasn't changed then the response will return the `incomeVerificationId` of the original case. No new case will be created.
 
 ### primaryIncome.grossIncome
