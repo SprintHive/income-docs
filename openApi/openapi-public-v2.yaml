@@ -32,7 +32,6 @@ info:
          A case that exists but has not finished processing is not a 404. `errors` is empty.
       *  `entity-gone` — the case existed but has been removed by the data retention policy. `errors` is empty.
       *  `feature-not-enabled` — the endpoint is not enabled for your tenant environment. `errors` is empty.
-      *  `operation-not-available` — the case is busy and the request should be retried. `errors` is empty.
 
     <!-- ReDoc-Inject: <security-definitions> -->
   contact:
@@ -208,8 +207,6 @@ paths:
                       errors:
                         - field: applicantDetails.mobileNumber
                           errorCode: Pattern
-        '409':
-          $ref: '#/components/responses/OperationNotAvailable'
       security:
         - bearerAuth:
             - 'incomeVerification:create'
@@ -283,8 +280,6 @@ paths:
                           errorCode: idNumber-required
         '404':
           $ref: '#/components/responses/IncomeVerificationNotFound'
-        '409':
-          $ref: '#/components/responses/OperationNotAvailable'
         '410':
           $ref: '#/components/responses/IncomeVerificationGone'
       security:
@@ -445,26 +440,8 @@ paths:
                       errors: []
         '404':
           $ref: '#/components/responses/IncomeVerificationNotFound'
-        '409':
-          $ref: '#/components/responses/OperationNotAvailable'
         '410':
           $ref: '#/components/responses/IncomeVerificationGone'
-        '415':
-          description: The uploaded document is not of a supported type
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExceptionMessage'
-              examples:
-                unsupportedContentType:
-                  summary: The document type cannot be processed
-                  value:
-                    error:
-                      errorType: invalid-input
-                      httpCode: 415
-                      errors:
-                        - field: file
-                          errorCode: unsupported-content-type
       security:
         - bearerAuth:
             - 'incomeVerification:file:upload'
@@ -517,8 +494,6 @@ paths:
                           errorCode: 'Error processing field.'
         '404':
           $ref: '#/components/responses/IncomeVerificationNotFound'
-        '409':
-          $ref: '#/components/responses/OperationNotAvailable'
         '410':
           $ref: '#/components/responses/IncomeVerificationGone'
       security:
@@ -547,8 +522,6 @@ paths:
           description: default response
         '404':
           $ref: '#/components/responses/IncomeVerificationNotFound'
-        '409':
-          $ref: '#/components/responses/OperationNotAvailable'
         '410':
           $ref: '#/components/responses/IncomeVerificationGone'
       security:
@@ -577,8 +550,6 @@ paths:
           description: default response
         '404':
           $ref: '#/components/responses/IncomeVerificationNotFound'
-        '409':
-          $ref: '#/components/responses/OperationNotAvailable'
         '410':
           $ref: '#/components/responses/IncomeVerificationGone'
       security:
@@ -607,8 +578,6 @@ paths:
           description: default response
         '404':
           $ref: '#/components/responses/IncomeVerificationNotFound'
-        '409':
-          $ref: '#/components/responses/OperationNotAvailable'
         '410':
           $ref: '#/components/responses/IncomeVerificationGone'
       security:
@@ -728,8 +697,6 @@ paths:
           description: default response
         '404':
           $ref: '#/components/responses/IncomeVerificationNotFound'
-        '409':
-          $ref: '#/components/responses/OperationNotAvailable'
         '410':
           $ref: '#/components/responses/IncomeVerificationGone'
       security:
@@ -841,8 +808,6 @@ paths:
           description: default response
         '404':
           $ref: '#/components/responses/IncomeVerificationNotFound'
-        '409':
-          $ref: '#/components/responses/OperationNotAvailable'
         '410':
           $ref: '#/components/responses/IncomeVerificationGone'
       security:
@@ -914,14 +879,32 @@ paths:
                           errorCode: invalid-date-range
                         - field: toDate
                           errorCode: invalid-date-range
-                invalidPaging:
-                  summary: page, pageSize or sortDirection is out of range or unrecognised
+                invalidPageSize:
+                  summary: pageSize is below 1 or above the maximum
                   value:
                     error:
                       errorType: invalid-input
                       httpCode: 400
                       errors:
                         - field: pageSize
+                          errorCode: invalid-input
+                invalidPage:
+                  summary: page is negative
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: page
+                          errorCode: invalid-input
+                invalidSortDirection:
+                  summary: sortDirection is neither asc nor desc
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: sortDirection
                           errorCode: invalid-input
       security:
         - bearerAuth:
@@ -1068,8 +1051,6 @@ paths:
                       errors: []
         '404':
           $ref: '#/components/responses/IncomeVerificationNotFound'
-        '409':
-          $ref: '#/components/responses/OperationNotAvailable'
         '410':
           $ref: '#/components/responses/IncomeVerificationGone'
       security:
@@ -1104,20 +1085,6 @@ components:
                 error:
                   errorType: entity-gone
                   httpCode: 410
-                  errors: []
-    OperationNotAvailable:
-      description: The case is busy processing an earlier request and this one should be retried
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ExceptionMessage'
-          examples:
-            operationNotAvailable:
-              summary: Retry the request
-              value:
-                error:
-                  errorType: operation-not-available
-                  httpCode: 409
                   errors: []
   schemas:
     ErrorDetail:
