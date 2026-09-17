@@ -11,6 +11,28 @@ info:
       *  Upload a bank statement or a payslip
       *  When income completion notification is received make a get request to get the latest income verification state
 
+    ## Errors
+
+    Every error response has the same shape, an `error` object holding an `errorType`, the `httpCode`, and
+    an `errors` array of `field` and `errorCode` pairs. `field` is the path of the offending property in the
+    request body you sent, so `primaryIncome.nettIncome` or `otherIncome[0].payCycleInDays`. Match on
+    `errorCode` rather than on the message, and treat both as open sets that may grow.
+
+    Every error body also carries a `traceId` and a `timestamp`. Quote the `traceId` when reporting a
+    problem to SprintHive. Neither is shown in the examples below, to keep them readable.
+
+    The `errorType` values you can encounter:
+
+      *  `invalid-input` — a value was rejected, or the body could not be parsed. `errors` names the field.
+      *  `validation-error` — a value failed a format constraint declared in this spec. `errorCode` is the
+         name of the constraint, for example `Pattern`, rather than a kebab-case code.
+      *  `invalid-multipart-request` — a multipart upload was malformed or sent with the wrong content type.
+      *  `income-verification-not-found` — no case exists for the given id. On
+         `/document/{documentId}` it can instead mean the document id is not one held against that case.
+         A case that exists but has not finished processing is not a 404. `errors` is empty.
+      *  `entity-gone` — the case existed but has been removed by the data retention policy. `errors` is empty.
+      *  `feature-not-enabled` — the endpoint is not enabled for your tenant environment. `errors` is empty.
+
     <!-- ReDoc-Inject: <security-definitions> -->
   contact:
     name: SprintHive
@@ -49,12 +71,142 @@ paths:
             application/json;charset=UTF-8:
               schema:
                 $ref: '#/components/schemas/IncomeVerificationCreated'
-        '404':
-          description: default response
+        '400':
+          description: Bad request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExceptionMessage'
+              examples:
+                applicantDetailsMandatory:
+                  summary: Your tenant environment requires applicant details and none were supplied
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: applicantDetails
+                          errorCode: applicant-details-mandatory
+                invalidStrategy:
+                  summary: The requested income detector strategy is not configured
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: config.incomeDetectorStrategy
+                          errorCode: invalid-strategy
+                invalidCurrency:
+                  summary: The expected currency is not one your tenant environment is configured for
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: config.expectedCurrency
+                          errorCode: invalid-value
+                fraudChecksCannotBeDisabled:
+                  summary: Fraud checks may not be disabled in this environment
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: config.disableFraudChecks
+                          errorCode: fraud-checks-cannot-be-disable
+                nettIncomeRequired:
+                  summary: >-
+                    No nett income was declared and based on your config it is required
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: primaryIncome.nettIncome
+                          errorCode: nett-income-required
+                nettIncomeNotGreaterThanZero:
+                  summary: The declared nett income is not a positive number
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: primaryIncome.nettIncome
+                          errorCode: nett-income-not-greater-than-zero
+                payCycleNotGreaterThanZero:
+                  summary: The declared pay cycle is not a positive number
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: primaryIncome.payCycleInDays
+                          errorCode: pay-cycle-not-greater-than-zero
+                otherNettIncomeIsNull:
+                  summary: An entry in otherIncome declares no nett income
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: otherIncome[0].nettIncome
+                          errorCode: nett-income-required
+                otherNettIncomeNotGreaterThanZero:
+                  summary: An entry in otherIncome has a nett income that is not a positive number
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: otherIncome[0].nettIncome
+                          errorCode: nett-income-not-greater-than-zero
+                otherPayCycleNotGreaterThanZero:
+                  summary: An entry in otherIncome has a pay cycle that is not a positive number
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: otherIncome[0].payCycleInDays
+                          errorCode: pay-cycle-not-greater-than-zero
+                documentTypeWhiteListEmpty:
+                  summary: The supplied document type white list is an empty array
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: config.createDocumentTypeWhiteList
+                          errorCode: whiteList-empty
+                documentTypeWhiteListInvalid:
+                  summary: The supplied document type white list contains an unrecognised document type
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: config.createDocumentTypeWhiteList
+                          errorCode: whiteList-invalid-doc-types
+                idempotencyDifferentPayload:
+                  summary: >-
+                    The correlationId was already used for a case created with a different payload. Reuse of a
+                    correlationId is only idempotent for an identical payload.
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: correlationId
+                          errorCode: idempotency-different-payload
+                mobileNumberPattern:
+                  summary: The applicant mobile number is not a valid South African mobile number
+                  value:
+                    error:
+                      errorType: validation-error
+                      httpCode: 400
+                      errors:
+                        - field: applicantDetails.mobileNumber
+                          errorCode: Pattern
       security:
         - bearerAuth:
             - 'incomeVerification:create'
@@ -80,6 +232,56 @@ paths:
       responses:
         '200':
           description: default response
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+              examples:
+                mismatch:
+                  summary: >-
+                    A value supplied here contradicts the one already captured on the case. Checked for
+                    idNumber, bankAccountNumber, bankBranchCode, initials, firstName, surname and
+                    emailAddress; field names the one that differs.
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: bankAccountNumber
+                          errorCode: miss-match
+                bankAccountNumberRequired:
+                  summary: No bank account number was supplied here or captured on the case
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: bankAccountNumber
+                          errorCode: bankAccountNumber-required
+                bankBranchCodeRequired:
+                  summary: No bank branch code was supplied here or captured on the case
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: bankBranchCode
+                          errorCode: bankBranchCode-required
+                idNumberRequired:
+                  summary: No id number was supplied here or captured on the case
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: idNumber
+                          errorCode: idNumber-required
+        '404':
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:create'
@@ -104,11 +306,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/IncomeVerificationDtoV2'
         '404':
-          description: default response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExceptionMessage'
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:read'
@@ -133,11 +333,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/FraudAnalysisDtoV2'
         '404':
-          description: default response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExceptionMessage'
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:read'
@@ -162,11 +360,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/IndicatorResults'
         '404':
-          description: default response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExceptionMessage'
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:indicator'
@@ -201,12 +397,51 @@ paths:
             application/json;charset=UTF-8:
               schema:
                 $ref: '#/components/schemas/DocumentInfoV2'
-        '404':
-          description: default response
+        '400':
+          description: Bad request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExceptionMessage'
+              examples:
+                filePartMissing:
+                  summary: The request has no file part
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: file
+                          errorCode: not-present
+                fileEmpty:
+                  summary: The file part is present but has no content
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: file
+                          errorCode: no-content
+                sizeLimitExceeded:
+                  summary: The file exceeds the maximum upload size
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: file
+                          errorCode: size-limit-exceeded
+                notMultipart:
+                  summary: The request was not a well formed multipart upload
+                  value:
+                    error:
+                      errorType: invalid-multipart-request
+                      httpCode: 400
+                      errors: []
+        '404':
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:file:upload'
@@ -231,11 +466,36 @@ paths:
         '200':
           description: default response
         '400':
-          description: Missing a required field or the bank statement start date is after the end date
+          description: A required field is missing, or a statement start date is after its end date
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExceptionMessage'
+              examples:
+                startDateAfterEndDate:
+                  summary: A statement's start date is after its end date
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: extractedBankStatements[0].statementStartDate
+                          errorCode: statementStartDateAfterStatementEndDate
+                missingRequiredField:
+                  summary: >-
+                    A required property is absent or has the wrong type. field is the path of the property
+                    that could not be read.
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: extractedBankStatements[0].transactions
+                          errorCode: 'Error processing field.'
+        '404':
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:bankStatement:upload'
@@ -261,11 +521,9 @@ paths:
         '200':
           description: default response
         '404':
-          description: default response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExceptionMessage'
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:fraud:create'
@@ -291,11 +549,9 @@ paths:
         '200':
           description: default response
         '404':
-          description: default response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExceptionMessage'
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:fraud:create'
@@ -321,11 +577,9 @@ paths:
         '200':
           description: default response
         '404':
-          description: default response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExceptionMessage'
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:fraud:create'
@@ -356,11 +610,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/DocumentStateV2'
         '404':
-          description: default response
+          description: >-
+            No income verification exists for the given id, or no document with the given documentId is
+            linked to it. Both return the same body.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExceptionMessage'
+              examples:
+                notFound:
+                  summary: Unknown incomeVerificationId or documentId
+                  value:
+                    error:
+                      errorType: income-verification-not-found
+                      httpCode: 404
+                      errors: []
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:document:read'
@@ -384,12 +650,26 @@ paths:
             application/json;charset=UTF-8:
               schema:
                 $ref: '#/components/schemas/DocumentChase'
-        '404':
-          description: default response
+        '402':
+          description: >-
+            Document chase is not enabled for your tenant environment. This endpoint may incur an additional fee,
+            contact SprintHive to enable it.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExceptionMessage'
+              examples:
+                featureNotEnabled:
+                  summary: Document chase is not enabled
+                  value:
+                    error:
+                      errorType: feature-not-enabled
+                      httpCode: 402
+                      errors: []
+        '404':
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:documentChase:read'
@@ -416,11 +696,9 @@ paths:
         '200':
           description: default response
         '404':
-          description: default response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExceptionMessage'
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:manualCapture:create'
@@ -445,11 +723,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/IncomeVerificationStateV2'
         '404':
-          description: default response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExceptionMessage'
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:state:read'
@@ -474,11 +750,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/BankStatement'
         '404':
-          description: default response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExceptionMessage'
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:state:read'
@@ -504,11 +778,9 @@ paths:
                 type: string
                 format: binary
         '404':
-          description: default response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExceptionMessage'
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:state:read'
@@ -535,11 +807,9 @@ paths:
         '200':
           description: default response
         '404':
-          description: default response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExceptionMessage'
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:confirmation:update'
@@ -562,12 +832,80 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PageSearchResult'
-        '404':
-          description: default response
+        '400':
+          description: >-
+            One of the filter, sort or paging parameters was rejected. Every rejected parameter appears in
+            errors, so this response can name more than one field.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExceptionMessage'
+              examples:
+                invalidFilterField:
+                  summary: A filter clause names a field that cannot be filtered on
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: someUnknownField
+                          errorCode: invalid-filter-field
+                invalidSortField:
+                  summary: The sort names a field that cannot be sorted on
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: someUnknownField
+                          errorCode: invalid-sort-field
+                invalidDateField:
+                  summary: dateField names a field that is not a date
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: dateField
+                          errorCode: invalid-date-field
+                invalidDateRange:
+                  summary: fromDate and toDate do not form a usable range
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: fromDate
+                          errorCode: invalid-date-range
+                        - field: toDate
+                          errorCode: invalid-date-range
+                invalidPageSize:
+                  summary: pageSize is below 1 or above the maximum
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: pageSize
+                          errorCode: invalid-input
+                invalidPage:
+                  summary: page is negative
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: page
+                          errorCode: invalid-input
+                invalidSortDirection:
+                  summary: sortDirection is neither asc nor desc
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: sortDirection
+                          errorCode: invalid-input
       security:
         - bearerAuth:
             - 'incomeVerification:filter:read'
@@ -597,18 +935,26 @@ paths:
             application/json;charset=UTF-8:
               schema:
                 $ref: '#/components/schemas/BankStatement'
-        '404':
-          description: default response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExceptionMessage'
         '402':
-          description: feature not enabled response
+          description: >-
+            Enriched transactions are not enabled for your tenant environment. This endpoint incurs an additional fee,
+            contact SprintHive to enable it.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExceptionMessage'
+              examples:
+                featureNotEnabled:
+                  summary: Enriched transactions are not enabled
+                  value:
+                    error:
+                      errorType: feature-not-enabled
+                      httpCode: 402
+                      errors: []
+        '404':
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:state:read'
@@ -661,10 +1007,85 @@ paths:
             application/json;charset=UTF-8:
               schema:
                 $ref: '#/components/schemas/UploadRequestResultV1'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+              examples:
+                differentMobileNumber:
+                  summary: >-
+                    The supplied mobile number does not match the one declared on the case. The mismatch is
+                    recorded against the case before the request is rejected.
+                  value:
+                    error:
+                      errorType: invalid-input
+                      httpCode: 400
+                      errors:
+                        - field: customer.mobileNumber
+                          errorCode: different-mobile-number
+                mobileNumberPattern:
+                  summary: The mobile number is not a valid South African mobile number
+                  value:
+                    error:
+                      errorType: validation-error
+                      httpCode: 400
+                      errors:
+                        - field: customer.mobileNumber
+                          errorCode: Pattern
+        '402':
+          description: >-
+            Upload requests are not enabled for your tenant environment. Contact SprintHive to enable them.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionMessage'
+              examples:
+                featureNotEnabled:
+                  summary: Upload requests are not enabled
+                  value:
+                    error:
+                      errorType: feature-not-enabled
+                      httpCode: 402
+                      errors: []
+        '404':
+          $ref: '#/components/responses/IncomeVerificationNotFound'
+        '410':
+          $ref: '#/components/responses/IncomeVerificationGone'
       security:
         - bearerAuth:
             - 'incomeVerification:upload'
 components:
+  responses:
+    IncomeVerificationNotFound:
+      description: No income verification exists for the given id
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExceptionMessage'
+          examples:
+            notFound:
+              summary: Unknown incomeVerificationId
+              value:
+                error:
+                  errorType: income-verification-not-found
+                  httpCode: 404
+                  errors: []
+    IncomeVerificationGone:
+      description: The income verification has been removed by the data retention policy
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExceptionMessage'
+          examples:
+            entityGone:
+              summary: The case has been deleted
+              value:
+                error:
+                  errorType: entity-gone
+                  httpCode: 410
+                  errors: []
   schemas:
     ErrorDetail:
       type: object
@@ -818,7 +1239,8 @@ components:
           type: string
           nullable: true
         mobileNumber:
-          type: string
+          allOf:
+            - $ref: '#/components/schemas/MobileNumberV1'
           nullable: true
         currentEmployerName:
           type: string
@@ -1809,7 +2231,7 @@ components:
           'incomeVerification:bankStatementApplicantMatchFailed': '#/components/schemas/DefaultHistoryTimelineItem'
           'incomeVerification:payslipCombinedDataValidationSucceeded': '#/components/schemas/DefaultHistoryTimelineItem'
           'incomeVerification:payslipCombinedDataOnTimedOut': '#/components/schemas/DefaultHistoryTimelineItem'
-          'incomeVerification:payslipDataValidationFailed': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:payslipDataValidationFailed': '#/components/schemas/PayslipDataValidationHistoryTimelineItem'
           'incomeVerification:payslipApplicantMatchFailed': '#/components/schemas/DefaultHistoryTimelineItem'
           'incomeVerification:incomeFoundBelowRequiredConfidence': '#/components/schemas/DefaultHistoryTimelineItem'
           'incomeVerification:targetIncomeResultFound': '#/components/schemas/DefaultHistoryTimelineItem'
@@ -1822,6 +2244,8 @@ components:
           'incomeVerification:incomeManuallyCaptured': '#/components/schemas/DefaultHistoryTimelineItem'
           'incomeVerification:confirmationCaptured': '#/components/schemas/DefaultHistoryTimelineItem'
           'incomeVerification:indicatorsCalculated': '#/components/schemas/IndicatorResultsHistoryTimelineItem'
+          'incomeVerification:uploadRequestCreated': '#/components/schemas/DefaultHistoryTimelineItem'
+          'incomeVerification:uploadLinkSent': '#/components/schemas/DefaultHistoryTimelineItem'
     DefaultHistoryTimelineItem:
       allOf:
         - $ref: '#/components/schemas/HistoryTimelineItem'
@@ -1868,6 +2292,13 @@ components:
           properties:
             data:
               $ref: '#/components/schemas/BankStatementValidationResultDto'
+    PayslipDataValidationHistoryTimelineItem:
+      allOf:
+        - $ref: '#/components/schemas/HistoryTimelineItem'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/PayslipDataValidationResultDto'
     IndicatorResultsHistoryTimelineItem:
       allOf:
         - $ref: '#/components/schemas/HistoryTimelineItem'
@@ -1935,6 +2366,13 @@ components:
         endDate:
           type: string
           format: date
+    PayslipDataValidationResultDto:
+      type: object
+      properties:
+        documentId:
+          type: string
+        dataValidationFailureReason:
+          type: string
     IndicatorResults:
       type: object
       required:
@@ -2005,7 +2443,7 @@ components:
         name:
           type: string
         mobileNumber:
-          type: string
+          $ref: '#/components/schemas/MobileNumberV1'
         emailAddress:
           type: string
     Tenant:
@@ -2037,6 +2475,10 @@ components:
       properties:
         uploadRequestId:
           type: string
+    MobileNumberV1:
+      type: string
+      pattern: '^(\+27|0)[678]\d{8}$'
+      description: "South African mobile number without spaces or hyphens. E.g., 0821234567 or +27821234567"
   securitySchemes:
     bearerAuth:
       type: oauth2
