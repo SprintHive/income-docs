@@ -48,15 +48,15 @@ Response:
 
 ## Response fields
 
-| Field                  | Description                                                                                                                  |
-|------------------------|:-----------------------------------------------------------------------------------------------------------------------------|
-| `incomeVerificationId` | The id of the case                                                                                                           |
-| `correlationId`        | Your system's identifier for the case, as supplied on creation                                                               |
-| `createdDate`          | When the case was created                                                                                                    |
+| Field                  | Description                                                                                                                 |
+|------------------------|:----------------------------------------------------------------------------------------------------------------------------|
+| `incomeVerificationId` | The id of the case                                                                                                          |
+| `correlationId`        | Your system's identifier for the case, as supplied on creation                                                              |
+| `createdDate`          | When the case was created                                                                                                   |
 | `config`               | The config the case was created with. See [configuration options](CreateIncomeVerificationRequest.md#configuration-options) |
-| `primaryIncome`        | The declared primary income: `nettIncome`, `grossIncome` and `payCycleInDays`                                                |
-| `otherIncome`          | Any other declared income, in the same shape as `primaryIncome`                                                              |
-| `applicantDetails`     | The applicant details supplied on creation. Left out when none were supplied                                                 |
+| `primaryIncome`        | The declared primary income: `nettIncome`, `grossIncome` and `payCycleInDays`                                               |
+| `otherIncome`          | Any other declared income, in the same shape as `primaryIncome`                                                             |
+| `applicantDetails`     | The applicant details supplied on creation. Left out when none were supplied                                                |
 | `invMetadata`          | Optional metadata linked to the case, such as the related product                                                           |
 
 Fields that were not supplied on creation may be `null` or left out of the response.
@@ -66,10 +66,10 @@ Fields that were not supplied on creation may be `null` or left out of the respo
 The `401` and `403` responses that apply to every call are described in the
 [security section](../../guides/security/CreatingJsonWebToken.md).
 
-| HTTP Code | Error Type                        | Description                                                                                                  |
-|-----------|-----------------------------------|:-------------------------------------------------------------------------------------------------------------|
-| `404`     | `income-verification-not-found`   | No case exists for the given `incomeVerificationId`                                                          |
-| `410`     | `entity-gone`                     | The case was deleted by the data retention policy. See [data retention](../../guides/data-retention/DataRetention.md) |
+| HTTP Code | Error Type                      | Description                                                                                                           |
+|-----------|---------------------------------|:----------------------------------------------------------------------------------------------------------------------|
+| `404`     | `income-verification-not-found` | No case exists for the given `incomeVerificationId`                                                                   |
+| `410`     | `entity-gone`                   | The case was deleted by the data retention policy. See [data retention](../../guides/data-retention/DataRetention.md) |
 
 ```json
 {
