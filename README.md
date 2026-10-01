@@ -31,9 +31,9 @@ See [what the statuses mean](api/v2/GetIncomeVerificationState.md#what-do-the-di
 | Endpoint | Description |
 |----------|-------------|
 | [Create Income Verification Request](api/v2/CreateIncomeVerificationRequest.md) | Create a new income verification case |
+| [Disable Fraud Checks](api/v2/DisableFraudForTesting.md) | Config option: disable fraud checks in testing environments |
 | [Min Income](api/v2/MinIncome.md) | Config option: minimum primary nett income required for high confidence |
 | [Bank Statement and Payslip Required](api/v2/IncomeFromBankStatementAndPayslip.md) | Config option: require both a bank statement and a payslip income result |
-| [Disable Fraud Checks](api/v2/DisableFraudForTesting.md) | Config option: disable fraud checks in testing environments |
 
 ### Document Submission
 
@@ -41,11 +41,13 @@ See [what the statuses mean](api/v2/GetIncomeVerificationState.md#what-do-the-di
 |----------|-------------|
 | [Upload Document](api/v2/UploadDocument.md) | Upload a bank statement or payslip file to a case |
 | [Upload Extracted Bank Statement Data](api/v2/UploadExtractedBankStatementData.md) | Submit bank statement transactions that have already been extracted |
+| [Upload Document by Correlation Id](api/v2/UploadDocumentByCorrelationId.md) | Upload a file to the case(s) matching your correlationId |
 
 ### Tracking Progress and Results
 
 | Endpoint | Description |
 |----------|-------------|
+| [Get Income Verification](api/v2/GetIncomeVerification.md) | Retrieve the case as it was created: config, declared income and applicant details |
 | [Get Income Verification State](api/v2/GetIncomeVerificationState.md) | Retrieve the case status, linked documents and income result |
 | [Document Chase](api/v2/DocumentChase.md) | List the income documents received and those still outstanding |
 | [Notifications](guides/notifications/Notifications.md) (guide) | Document processed and status changed notifications over webhook or SQS |
