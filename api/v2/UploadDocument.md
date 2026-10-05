@@ -22,7 +22,7 @@ Response:
 
 ```json
 {
-  "documentId": "a26b2ffg-146e-4fe4-a526-8083851eecef"
+  "documentId": "a26b2ffa-146e-4fe4-a526-8083851eecef"
 }
 ```
 
