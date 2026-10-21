@@ -38,7 +38,7 @@ Example response:
 Transactions that were selected as the primary income will be identified with `"inPrimaryIncomeStream": true`. 
 If "otherIncome" was declared when creating the income verification, transactions that were selected as that other 
 income will be identified with `"inOtherIncomeStream": true`. All other transactions that were not identified as income 
-will have these fields be false, as in the example above.
+will have these fields be false, as in the example above. See [Other Income](OtherIncome.md) for how other income is matched.
 
 ## Enriched Transactions
 This endpoint will return the consolidated list of transactions that were used to determine income. Additional 

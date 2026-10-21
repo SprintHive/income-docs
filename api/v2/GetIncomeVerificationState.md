@@ -65,11 +65,33 @@ Response:
         "docIds": [
           "d3107619-26d9-4093-a7e4-79fd9d4caeb2"
         ]
-      }
+      },
+      "otherIncome": [
+        {
+          "declaredNettIncome": 1000,
+          "detectedNettIncome": 950.00,
+          "confidence": 0.9847,
+          "variance": -0.05263,
+          "payments": [
+            {
+              "date": "2021-06-17",
+              "amount": 950.00
+            }
+          ],
+          "payDay": 17,
+          "payCycle": 30,
+          "docIds": [
+            "d3107619-26d9-4093-a7e4-79fd9d4caeb2"
+          ]
+        }
+      ]
     }
   }
 }
 ```
+
+`analysisResult.otherIncome` has one item for each declared other income, in the order declared. See
+[Other Income](OtherIncome.md) for how it is detected and what is returned when it is not found.
 
 ### What do the different Statuses mean?
 

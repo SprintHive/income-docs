@@ -34,6 +34,7 @@ See [what the statuses mean](api/v2/GetIncomeVerificationState.md#what-do-the-di
 | [Disable Fraud Checks](api/v2/DisableFraudForTesting.md)                           | Config option: disable fraud checks in testing environments              |
 | [Min Income](api/v2/MinIncome.md)                                                  | Config option: minimum primary nett income required for high confidence  |
 | [Bank Statement and Payslip Required](api/v2/IncomeFromBankStatementAndPayslip.md) | Config option: require both a bank statement and a payslip income result |
+| [Other Income](api/v2/OtherIncome.md)                                              | Declare additional income streams and read their detected result         |
 
 ### Document Submission
 
