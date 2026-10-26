@@ -43,3 +43,6 @@ Body:
 Response:
 No body is returned for this response
 
+The `otherIncome` sent here replaces any automatically detected other income. Leave it out and the case's other
+income result will be empty. See [Other Income](OtherIncome.md#manual-capture).
+

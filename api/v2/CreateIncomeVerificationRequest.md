@@ -26,6 +26,12 @@ Body:
     "nettIncome": "20000",
     "grossIncome": "25000"
   },
+  "otherIncome": [
+    {
+      "nettIncome": "4500",
+      "payCycleInDays": 30
+    }
+  ],
   "applicantDetails": {
     "dateOfBirth": "",
     "emailAddress": "",
@@ -243,10 +249,21 @@ See [here](IncomeFromBankStatementAndPayslip.md) for when it can become optional
 
 ### primaryIncome.payCycleInDays
 
-How often the applicant gets paid (e.g. 7 for weekly, 14 for fortnightly, 30 for monthly)
+The `payCycleInDays` sets the cycle that `detectedNettIncome` is reported back in. (7 for weekly, 14 for fortnightly, 30 for monthly).
+The detected nett income is scaled to this cycle, e.g. if `payCycleInDays` is set to 7 then the detected income will be
+reported back as a weekly amount even if they are not paid weekly. Similarly, if set to 30, the detected income will be
+reported back as a monthly amount. So weekly payments of R1000 are returned as R4285.71 when this is 30.
 This is an optional field, but when it is specified it must be a positive integer. It cannot be 0 or negative.
 
 > Defaults to 30
+
+### otherIncome
+
+An optional list of any income the applicant receives on top of their primary income. Each entry has the same fields as
+`primaryIncome`: `nettIncome` (required, must be a positive number), `grossIncome` and `payCycleInDays` (defaults to 30).
+Other income is detected from bank statements only and does not affect the case status.
+
+[click here for more details](OtherIncome.md)
 
 ### incomeDetectorStrategy
 
