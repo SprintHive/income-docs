@@ -26,7 +26,7 @@ You can **disable fraud checks** at the case level in testing environments by se
 }
 ```
 
-When `disableFraudChecks` is `true`, documents still undergo fraud analysis, and their status could be **`confirmed fraud`**. However, Income won't halt the case immediately based on this status. The fraudulent document will still proceed through extraction and further processing, allowing the case to be completed and yield a final result.
+When `disableFraudChecks` is `true`, documents still undergo [fraud analysis](GetFraudAnalysis.md), and their status could be **`confirmed fraud`**. However, Income won't halt the case immediately based on this status. The fraudulent document will still proceed through extraction and further processing, allowing the case to be completed and yield a final result.
 When `disableFraudChecks` is `false` or it is left unset income will behave as normal, so there is no need to change existing calls in prod environments.
 
 ---

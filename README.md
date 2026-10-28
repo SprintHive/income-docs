@@ -51,6 +51,7 @@ See [what the statuses mean](api/v2/GetIncomeVerificationState.md#what-do-the-di
 | [Get Income Verification](api/v2/GetIncomeVerification.md)            | Retrieve the case as it was created: config, declared income and applicant details |
 | [Get Income Verification State](api/v2/GetIncomeVerificationState.md) | Retrieve the case status, linked documents and income result                       |
 | [Document Chase](api/v2/DocumentChase.md)                             | List the income documents received and those still outstanding                     |
+| [Get Fraud Analysis](api/v2/GetFraudAnalysis.md)                      | Retrieve the fraud decisions, tampering hints and profile analysis for a case      |
 | [Notifications](guides/notifications/Notifications.md) (guide)        | Document processed and status changed notifications over webhook or SQS            |
 
 ### Document Data Retrieval
