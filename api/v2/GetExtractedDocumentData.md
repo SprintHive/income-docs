@@ -63,7 +63,9 @@ An example of the response when the document is a payslip:
             "type": "uif",
             "amount": 148.72
           }
-      ]
+        ],
+        "persal": false,
+        "numberOfPages": 1
     }
 }
 ```
@@ -96,7 +98,8 @@ An example of the response when the document is a bank statement
         },
         "balanceBroughtForward": 22.73,
         "statementStartDate": "2021-10-28",
-        "statementEndDate": "2022-01-26"
+        "statementEndDate": "2022-01-26",
+        "numberOfPages": 5
     }
 }
 ```
@@ -136,7 +139,8 @@ An example of the response when the document is a bank statement with additional
         },
         "balanceBroughtForward": 22.73,
         "statementStartDate": "2022-02-25",
-        "statementEndDate": "2022-03-26"
+        "statementEndDate": "2022-03-26",
+        "numberOfPages": 11
     }
 }
 ```

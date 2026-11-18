@@ -1729,6 +1729,9 @@ components:
         statementEndDate:
           type: string
           format: date
+        numberOfPages:
+          type: integer
+          description: Number of pages in the document as counted by document management. This is the page count used for billing. It is null for documents processed before this field was added
         transactions:
           type: array
           items:
@@ -1871,6 +1874,9 @@ components:
             $ref: '#/components/schemas/DeductionItem'
         persal:
           type: boolean
+        numberOfPages:
+          type: integer
+          description: Number of pages in the document as counted by document management. This is the page count used for billing. It is null for documents processed before this field was added
     FraudHistoryItem:
       type: object
       properties:
