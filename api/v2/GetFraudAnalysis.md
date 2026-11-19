@@ -4,11 +4,16 @@ The following endpoint can be used to fetch the fraud analysis of an income veri
 It returns two lists:
 
 * `history` — every fraud decision made on the case, in the order it was made. This covers the automated document
-  tampering check run on each document, and any fraud decision captured by an agent or third party system.
-* `profileAnalysis` — the results of the applicant profile building analysis, such as the spending curve check.
+  tampering check run on each document, and any fraud decision captured by a human agent or third party system.
+* `profileAnalysis` — the results of the applicant profile building analysis on the bank statement transactions.
 
 Use this endpoint to see *why* a case or document was referred to fraud. The case status and the document statuses
 themselves are returned by the [income verification state](GetIncomeVerificationState.md) endpoint.
+
+Whether an automated decision stops the case (and changes the income status, subStatus and document status) depends on your tenant config and on `disableFraudChecks`. See [disable fraud checks](DisableFraudForTesting.md) and [what the statuses mean](GetIncomeVerificationState.md#what-do-the-different-statuses-mean).
+
+If you want to get tampering results without the income verification being blocked by these automated results, use this 
+fraud analysis api.
 
 ## Prerequisites
 * You have read and understand the security section [click here for more details](../../guides/security/CreatingJsonWebToken.md)
@@ -21,8 +26,8 @@ Below is an example response for a case with three documents:
 
 1. The first document raised a high risk hint, but its overall result was a warning, so it was suspected of fraud.
 2. The second document was not sent for tampering checks, so nothing was flagged and no checks are listed.
-3. The third document raised three high risk hints and its overall result was high risk, so it was confirmed as fraud.
-4. An agent then reviewed the case, first suspecting and then confirming fraud.
+3. The third document raised three high risk hints and its overall result was high risk, so the automated result was confirmed fraud.
+4. An agent then reviewed the case, confirming fraud.
 
 The profile analysis ran once on the bank statement transactions and found a low risk spending curve.
 
@@ -89,14 +94,6 @@ Response:
       ]
     },
     {
-      "createdDate": "2026-10-28T16:50:22.079",
-      "agent": "Fraud Agent",
-      "decision": "AGENT_SUSPECTED_FRAUD",
-      "reason": "Suspicious documents",
-      "fraudHints": [],
-      "completedFraudChecks": []
-    },
-    {
       "createdDate": "2026-10-28T16:51:25.547",
       "agent": "Fraud Agent",
       "decision": "AGENT_CONFIRMED_FRAUD",
@@ -150,15 +147,10 @@ entry.
 | `AGENT_CONFIRMED_FRAUD`                 | Agent     | An agent or third party system confirmed the case is fraudulent, via `POST income/v2/incomeVerification/${incomeVerificationId}/confirmFraud`        |
 | `AGENT_CONFIRMED_NOT_FRAUD`             | Agent     | An agent or third party system confirmed the case is not fraudulent, via `POST income/v2/incomeVerification/${incomeVerificationId}/confirmNotFraud` |
 
-An automated decision is based on the overall fraud result for the document, not on the highest risk among its
-`fraudHints`. The tampering analysis scores every individual check it runs, weighting each by how strongly it indicates
-fraud, and adds to the score when known combinations of checks fail together. The total score decides whether the
-document is normal, suspected or confirmed fraud. A single tampering signal can be high risk on its own without being
+An automated decision is based on the overall tampering results for the document, not on the highest risk among its
+`fraudHints`. A single tampering signal can be high risk on its own without being
 strong enough evidence of fraud. That is why the first document in the example above has a `HIGH` hint but only an
 `AUTOMATED_SUSPECTED_FRAUD` decision.
-
-Whether an automated decision stops the case (and changes the income status, subStatus and document status) depends on your tenant config and on `disableFraudChecks`. See
-[disable fraud checks](DisableFraudForTesting.md) and [what the statuses mean](GetIncomeVerificationState.md#what-do-the-different-statuses-mean).
 
 #### Fraud hints
 
@@ -196,7 +188,7 @@ bank statements from banks that are not enabled for tampering checks.
 
 Each entry in `profileAnalysis` is one run of the applicant profile analysis. The analysis runs on the bank statement
 transactions, and runs again each time the transactions on the case change, such as when another bank statement is
-added. The last entry is the most recent result. Cases with only payslips have no profile analysis.
+added. The last entry is the most recent result.
 
 | Field          | Description                                   |
 |----------------|:----------------------------------------------|
