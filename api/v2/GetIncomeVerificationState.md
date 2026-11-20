@@ -120,7 +120,8 @@ The following table explains the status and subStatus in the example response ab
 ### How to route the applications based on status
 
 When the status is SUCCESS and result.status is "HIGH_CONFIDENCE" the income has been determined so the application can proceed to the next step in your process.  
-When the status is CONFIRMED_FRAUD the application should be sent to the fraud department for review.  
+When the status is CONFIRMED_FRAUD or REFERRED_TO_FRAUD the application could be sent to the fraud department for review.
+The [fraud analysis api](GetFraudAnalysis.md) shows which documents were flagged and why, to support that review.  
 When the status is FAILED the application can be sent for manual review.  
 
 If the status is IN_PROGRESS and the subStatus is one of WAITING_FOR_DOCUMENTS, PROBLEMS_WITH_DOCUMENTS or 
@@ -145,6 +146,9 @@ The document status can be used to determine what the problem is and communicati
 | CONFIRMED_FRAUD             | This can happen if the fraud team confirms fraud or if a high risk document tampering check has failed (Automated fraud checks must be enabled). The front end SprintHive console will show Document Status "Confirmed Doc Tampering"              |
 | DUPLICATE                   | This means that this document is a duplicate of another document already linked to this income verification                                                                                                                                        |
 | DOCUMENT_TYPE_NOT_ENABLED   | This means that the document type (bank statement or payslip) is not enabled, the document will not be used to detect income                                                                                                                       |
+
+For a document with a SUSPECTED_FRAUD or CONFIRMED_FRAUD status, the [fraud analysis api](GetFraudAnalysis.md) lists the
+tampering checks that were run on it and the ones that raised a risk.
 
 ### Pay Day
 - The `payDay` is the day of the month that the applicant is most often paid. If there is a tie, then the latest day of the month will be used. This pay day is calculated from the list of bank statement payments.
